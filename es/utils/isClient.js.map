@@ -1,0 +1,1 @@
+{"version":3,"file":"isClient.js","sourceRoot":"","sources":["../../src/utils/isClient.ts"],"names":[],"mappings":"AAAA,MAAM,UAAU,QAAQ;IACpB,OAAO,CAAC,CAAC,CAAC,OAAO,MAAM,KAAK,WAAW,IAAI,MAAM,CAAC,QAAQ,CAAC,CAAC;AAChE,CAAC","sourcesContent":["export function isClient ():boolean {\n    return !!(typeof window !== 'undefined' && window.document);\n}\n"]}

@@ -1,0 +1,1 @@
+{"version":3,"file":"network.js","sourceRoot":"","sources":["../../src/types/network.ts"],"names":[],"mappings":"","sourcesContent":["import {ChainType} from \"./\";\n\nexport interface INetwork {\n    nodeUrl: string;\n    chainId?: string;\n    chainType:ChainType\n}"]}

@@ -1,0 +1,61 @@
+{
+  "name": "@emit/box",
+  "version": "1.0.0",
+  "description": "EMIT Account SDK",
+  "homepage": "https://emit.technology",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "browser": "umd/index.js",
+  "types": "umd/index.d.ts",
+  "scripts": {
+    "clean": "rimraf umd lib es",
+    "build": "npm run clean && npm run patch-vendors && npm run build:lib && npm run build:es && npm run insert-version && npm run build:umd && npm run dts-bundle && npm run print-integrity",
+    "build:lib": "tsc --outDir lib --module commonjs",
+    "build:es": "tsc --outDir es --module es2015",
+    "build:umd": "webpack",
+    "dts-bundle": "dts-bundle-generator --config=dts-config.json",
+    "insert-version": "node utils/replace.js",
+    "patch-vendors": "patch-package",
+    "print-integrity": "node utils/integrity.js",
+    "prepublishOnly": "EMIT_WIDGET_URL=\"\" npm run build",
+    "start": "nodemon --watch src --watch utils -e ts -x \"npm run build\""
+  },
+  "keywords": [],
+  "author": "tobey.allison@emit.technology",
+  "repository": {
+    "url": "https://github.com/emit-technology/emit-box"
+  },
+  "license": "MIT",
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^14.18.12",
+    "husky": "^7.0.4",
+    "prettier": "^2.6.0",
+    "pretty-quick": "^3.1.3",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.2",
+    "babel-core": "6.26.0",
+    "babel-loader": "7.1.4",
+    "babel-plugin-add-module-exports": "1.0.0",
+    "babel-plugin-transform-runtime": "6.23.0",
+    "babel-preset-env": "1.7.0",
+    "dotenv": "8.2.0",
+    "dts-bundle-generator": "5.8.0",
+    "nodemon": "1.19.4",
+    "patch-package": "6.2.2",
+    "prettier-quick": "0.0.5",
+    "replace-in-file": "3.4.3",
+    "rimraf": "2.6.1",
+    "webpack": "4.28.3",
+    "webpack-cli": "3.1.2"
+  },
+  "dependencies": {
+    "ethereumjs-util": "^7.1.4",
+    "penpal": "^6.2.2",
+    "web3-provider-engine": "^16.0.3"
+  }
+}
