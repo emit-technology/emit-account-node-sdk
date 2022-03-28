@@ -1,5 +1,5 @@
 {
-  "name": "@emit/box",
+  "name": "@emit-technology/emit-account-node-sdk",
   "version": "1.0.0",
   "description": "EMIT Account SDK",
   "homepage": "https://emit.technology",
@@ -23,7 +23,7 @@
   "keywords": [],
   "author": "tobey.allison@emit.technology",
   "repository": {
-    "url": "https://github.com/emit-technology/emit-box"
+    "url": "git+https://github.com/emit-technology/emit-box.git"
   },
   "license": "MIT",
   "husky": {
@@ -57,5 +57,12 @@
     "ethereumjs-util": "^7.1.4",
     "penpal": "^6.2.2",
     "web3-provider-engine": "^16.0.3"
+  },
+  "bugs": {
+    "url": "https://github.com/emit-technology/emit-box/issues"
+  },
+  "directories": {
+    "doc": "docs",
+    "lib": "lib"
   }
 }

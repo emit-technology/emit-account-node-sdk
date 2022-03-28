@@ -8,7 +8,7 @@ myShellScript.stdout.on('data', data => {
   console.log('Update packages/emit-box-docs/docs/installation.md');
   console.log('----------------------------------------------');
   console.log(`<script
-  src="https://cdn.jsdelivr.net/npm/@emit/box@${version}/umd/index.js"
+  src="https://cdn.jsdelivr.net/npm/@emit-technology/emit-account-node-sdk@${version}/umd/index.js"
   integrity="sha256-${data}"
   crossorigin="anonymous"
 ></script>`);

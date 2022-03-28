@@ -32,7 +32,7 @@ export default () => [
           test: /\.(js)$/,
           include: [
             path.resolve(__dirname, 'src'),
-            path.resolve(__dirname, 'node_modules/@emit/web3-provider-engine'),
+            path.resolve(__dirname, 'node_modules/@emit-technology/web3-provider-engine'),
           ],
           use: 'babel-loader',
         },
