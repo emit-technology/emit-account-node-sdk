@@ -23,7 +23,7 @@
   "keywords": [],
   "author": "tobey.allison@emit.technology",
   "repository": {
-    "url": "git+https://github.com/emit-technology/emit-box.git"
+    "url": "git+https://github.com/emit-technology/emit-account-node-sdk.git"
   },
   "license": "MIT",
   "husky": {
@@ -59,7 +59,7 @@
     "web3-provider-engine": "^16.0.3"
   },
   "bugs": {
-    "url": "https://github.com/emit-technology/emit-box/issues"
+    "url": "https://github.com/emit-technology/emit-account-node-sdk/issues"
   },
   "directories": {
     "doc": "docs",
