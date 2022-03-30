@@ -7,7 +7,8 @@ import { styles } from './styles';
 
 // Create a .env file to override the default WIDGET_URL when running locally
 const EMIT_WIDGET_URL = process.env.EMIT_WIDGET_URL || 'https://accounts.emit.technology';
-const EMIT_CONTAINER_CLASS = 'frame-emit-container';
+const EMIT_CONTAINER_CLASS = 'emit-widget-container';
+const EMIT_IFRAME_CLASS = 'emit-widget-frame';
 
 export function windowLoadHandler() {
     if (document.getElementsByClassName(EMIT_CONTAINER_CLASS).length) {
@@ -77,7 +78,7 @@ export class WidgetManager {
 
         const widgetFrame = document.createElement('div');
         widgetFrame.id = `emit-container-${Date.now()}`;
-        widgetFrame.className = EMIT_CONTAINER_CLASS;
+        widgetFrame.className = EMIT_IFRAME_CLASS;
 
         const iframe = document.createElement('iframe');
         iframe.src = this._widgetUrl;

@@ -1,5 +1,5 @@
 export const styles = `
-.frame-emit-container {
+.emit-widget-container {
   position: fixed;
   width: 0px;
   height: 0px;
@@ -9,13 +9,13 @@ export const styles = `
 }
 
 @media (max-width: 576px) {
-  .frame-emit-container {
+  .emit-widget-container {
     bottom: 0;
     top: auto;
   }
 }
 
-.frame-emit-widget {
+.emit-widget-frame {
   position: fixed;
   width: 375px;
   height: 0;
@@ -28,7 +28,7 @@ export const styles = `
 }
 
 @media (max-width: 576px) {
-  .frame-emit-widget {
+  .emit-widget-frame {
     bottom: 0;
     top: auto;
     width: 100%;
