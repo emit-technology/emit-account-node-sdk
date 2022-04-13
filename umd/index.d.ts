@@ -10,7 +10,7 @@ export interface INetwork {
 export interface IMethods {
 	getAccounts: (config: IConfig) => Promise<{
 		error: string;
-		result: Array<AccountModel>;
+		result: Array<string>;
 	}>;
 	signTransaction: (txParams: any, config: IConfig) => Promise<{
 		error: string;
@@ -47,21 +47,6 @@ export interface IDapp {
 	url?: string;
 	category?: string;
 	contractAddress?: any;
-}
-export interface AccountModel {
-	accountId?: string;
-	name: string;
-	password?: string;
-	avatar?: string;
-	hint?: string;
-	addresses?: Array<{
-		[chainType: number]: string;
-	}>;
-	createType?: CreateType;
-}
-declare enum CreateType {
-	Mnemonic = 0,
-	PrivateKey = 1
 }
 declare enum ChainType {
 	_ = 0,
@@ -117,6 +102,7 @@ declare class EmitBox {
 	get web3Provider(): any;
 	get provider(): any;
 	changeNetwork(network: string | INetwork): void;
+	setSelectedAddress(address: string): void;
 	getWidget(): Promise<IWidget>;
 	onActiveWalletChanged(callback: (walletAddress: string) => void): void;
 	onError(callback: (error: Error) => void): void;

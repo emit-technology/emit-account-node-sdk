@@ -55,7 +55,7 @@ var WidgetManager = /** @class */ (function () {
         this._widgetConfig = _widgetConfig;
         this._widgetUrl = EMIT_WIDGET_URL;
         this._onErrorCallback = function () { };
-        (0, utils_1.validateSecureOrigin)();
+        utils_1.validateSecureOrigin();
         WidgetManager._checkIfWidgetAlreadyInitialized();
     }
     // async singleton
@@ -111,7 +111,7 @@ var WidgetManager = /** @class */ (function () {
             var style, container, widgetFrame, iframe, connection, communication;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, (0, utils_1.onWindowLoad)()];
+                    case 0: return [4 /*yield*/, utils_1.onWindowLoad()];
                     case 1:
                         _a.sent();
                         style = document.createElement('style');
@@ -119,7 +119,7 @@ var WidgetManager = /** @class */ (function () {
                         container = document.createElement('div');
                         container.className = EMIT_CONTAINER_CLASS;
                         widgetFrame = document.createElement('div');
-                        widgetFrame.id = "emit-container-".concat(Date.now());
+                        widgetFrame.id = "emit-container-" + Date.now();
                         widgetFrame.className = EMIT_IFRAME_CLASS;
                         iframe = document.createElement('iframe');
                         console.log("init...", this._widgetUrl, this);
@@ -145,7 +145,7 @@ var WidgetManager = /** @class */ (function () {
                                 document.head.appendChild(style);
                             });
                         }
-                        connection = (0, penpal_1.connectToChild)({
+                        connection = penpal_1.connectToChild({
                             iframe: iframe,
                             methods: {
                                 setHeight: this._setHeight.bind(this),
@@ -174,7 +174,7 @@ var WidgetManager = /** @class */ (function () {
                     case 0: return [4 /*yield*/, this.getWidget()];
                     case 1:
                         widgetFrame = (_a.sent()).widgetFrame;
-                        widgetFrame.style.height = "".concat(height, "px");
+                        widgetFrame.style.height = height + "px";
                         return [2 /*return*/];
                 }
             });
@@ -202,4 +202,3 @@ var WidgetManager = /** @class */ (function () {
     return WidgetManager;
 }());
 exports.WidgetManager = WidgetManager;
-//# sourceMappingURL=widgetManager.js.map

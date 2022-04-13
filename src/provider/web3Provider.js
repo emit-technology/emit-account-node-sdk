@@ -340,4 +340,3 @@ var Web3Manager = /** @class */ (function () {
     return Web3Manager;
 }());
 exports.Web3Manager = Web3Manager;
-//# sourceMappingURL=web3Provider.js.map

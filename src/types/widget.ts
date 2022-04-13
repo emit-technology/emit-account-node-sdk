@@ -1,10 +1,9 @@
-import {AccountModel} from '../types';
 import {IConfig} from "./";
 import { AsyncMethodReturns } from 'penpal';
 
 export interface IMethods {
 
-    getAccounts: (config:IConfig) => Promise<{error:string;result:Array<AccountModel>}>;
+    getAccounts: (config:IConfig) => Promise<{error:string;result:Array<string>}>;
 
     signTransaction: (txParams: any,config:IConfig) => Promise<{error:string;result:string}>;
 

@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,26 +35,27 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { networkAdapter } from './network';
-import { onWindowLoad, validateSecureOrigin } from './utils';
-import { windowLoadHandler, WidgetManager } from './widget';
-import { Web3Manager } from './provider';
-var VERSION = '1.0.1';
-onWindowLoad()
-    .then(windowLoadHandler)
+Object.defineProperty(exports, "__esModule", { value: true });
+var network_1 = require("./network");
+var utils_1 = require("./utils");
+var widget_1 = require("./widget");
+var provider_1 = require("./provider");
+var VERSION = '$$EMIT_BOX_VERSION$$';
+utils_1.onWindowLoad()
+    .then(widget_1.windowLoadHandler)
     .catch(function () { }); // Prevents unhandledPromiseRejectionWarning, which happens when using React SSR;
 var EmitBox = /** @class */ (function () {
     function EmitBox(dapp, network) {
-        validateSecureOrigin();
+        utils_1.validateSecureOrigin();
         this._validateParams(network);
         this._config = {
-            network: networkAdapter(network),
+            network: network_1.networkAdapter(network),
             version: VERSION,
             dapp: dapp
         };
         this._getWidgetCommunication = this._getWidgetCommunication.bind(this);
-        this._widgetManagerInstance = new WidgetManager(this.config);
-        this._web3ManagerInstance = new Web3Manager(this.config, this._getWidgetCommunication);
+        this._widgetManagerInstance = new widget_1.WidgetManager(this.config);
+        this._web3ManagerInstance = new provider_1.Web3Manager(this.config, this._getWidgetCommunication);
         this.changeNetwork = this.changeNetwork.bind(this);
         this.getWidget = this.getWidget.bind(this);
         this.onActiveWalletChanged = this.onActiveWalletChanged.bind(this);
@@ -109,9 +111,6 @@ var EmitBox = /** @class */ (function () {
     EmitBox.prototype.changeNetwork = function (network) {
         this._web3Manager.changeNetwork(network);
     };
-    EmitBox.prototype.setSelectedAddress = function (address) {
-        this._web3Manager.setSelectedAddress(address);
-    };
     // async singleton
     EmitBox.prototype.getWidget = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -143,5 +142,4 @@ var EmitBox = /** @class */ (function () {
     };
     return EmitBox;
 }());
-export default EmitBox;
-//# sourceMappingURL=index.js.map
+exports.default = EmitBox;

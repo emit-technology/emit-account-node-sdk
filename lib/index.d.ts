@@ -13,6 +13,7 @@ declare class EmitBox {
     get web3Provider(): any;
     get provider(): any;
     changeNetwork(network: string | INetwork): void;
+    setSelectedAddress(address: string): void;
     getWidget(): Promise<IWidget>;
     onActiveWalletChanged(callback: (walletAddress: string) => void): void;
     onError(callback: (error: Error) => void): void;

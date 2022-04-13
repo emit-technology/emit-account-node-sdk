@@ -171,7 +171,7 @@ var Web3Manager = /** @class */ (function () {
                             _a = _b.sent(), error = _a.error, result = _a.result;
                             if (!error && result) {
                                 // @ts-ignore
-                                this._selectedAddress = result[0].addresses[this.config.network.chainType];
+                                this._selectedAddress = result[0];
                             }
                             cb(error, result);
                             return [2 /*return*/];
@@ -194,32 +194,34 @@ var Web3Manager = /** @class */ (function () {
                 });
             }); },
             signMessage: function (msgParams, cb) { return __awaiter(_this, void 0, void 0, function () {
-                var widgetCommunication, params, _a, error, result;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
+                var widgetCommunication, params, ret, error, result;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
                         case 0: return [4 /*yield*/, this._getWidgetCommunication()];
                         case 1:
-                            widgetCommunication = _b.sent();
+                            widgetCommunication = _a.sent();
                             params = __assign(__assign({}, msgParams), { messageStandard: 'signMessage' });
                             return [4 /*yield*/, widgetCommunication.signMessage(params, this.config)];
                         case 2:
-                            _a = _b.sent(), error = _a.error, result = _a.result;
+                            ret = _a.sent();
+                            error = ret.error, result = ret.result;
                             cb(error, result);
                             return [2 /*return*/];
                     }
                 });
             }); },
             signPersonalMessage: function (msgParams, cb) { return __awaiter(_this, void 0, void 0, function () {
-                var widgetCommunication, params, _a, error, result;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
+                var widgetCommunication, params, ret, error, result;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
                         case 0: return [4 /*yield*/, this._getWidgetCommunication()];
                         case 1:
-                            widgetCommunication = _b.sent();
+                            widgetCommunication = _a.sent();
                             params = __assign(__assign({}, msgParams), { messageStandard: 'signPersonalMessage' });
                             return [4 /*yield*/, widgetCommunication.signMessage(params, this.config)];
                         case 2:
-                            _a = _b.sent(), error = _a.error, result = _a.result;
+                            ret = _a.sent();
+                            error = ret.error, result = ret.result;
                             cb(error, result);
                             return [2 /*return*/];
                     }
@@ -279,15 +281,16 @@ var Web3Manager = /** @class */ (function () {
         this.engine.addProvider({
             setEngine: function (_) { return _; },
             handleRequest: function (payload, next, end) { return __awaiter(_this, void 0, void 0, function () {
-                var widgetCommunication, _a, error, result;
-                return __generator(this, function (_b) {
-                    switch (_b.label) {
+                var widgetCommunication, ret, error, result;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
                         case 0: return [4 /*yield*/, this._getWidgetCommunication()];
                         case 1:
-                            widgetCommunication = _b.sent();
+                            widgetCommunication = _a.sent();
                             return [4 /*yield*/, widgetCommunication.relay(payload, this.config)];
                         case 2:
-                            _a = _b.sent(), error = _a.error, result = _a.result;
+                            ret = _a.sent();
+                            error = ret.error, result = ret.result;
                             if (payload.method === 'net_version') {
                                 this._network = result;
                                 this.engine.networkVersion = this._network;
@@ -323,7 +326,7 @@ var Web3Manager = /** @class */ (function () {
                 console.error(error);
             }
         });
-        this.engine.start();
+        // this.engine.start();
         return this.engine;
     };
     Web3Manager.prototype.clearSubprovider = function (subproviderType) {

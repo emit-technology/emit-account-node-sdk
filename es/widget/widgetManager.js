@@ -39,7 +39,8 @@ import { onWindowLoad, validateSecureOrigin } from '../utils';
 import { styles } from './styles';
 // Create a .env file to override the default WIDGET_URL when running locally
 var EMIT_WIDGET_URL = process.env.EMIT_WIDGET_URL || 'https://accounts.emit.technology';
-var EMIT_CONTAINER_CLASS = 'frame-emit-container';
+var EMIT_CONTAINER_CLASS = 'emit-widget-container';
+var EMIT_IFRAME_CLASS = 'emit-widget-frame';
 export function windowLoadHandler() {
     if (document.getElementsByClassName(EMIT_CONTAINER_CLASS).length) {
         console.warn('EMIT script was already loaded. This might cause unexpected behavior. If loading with a script tag, please make sure that you only load it once.');
@@ -115,8 +116,9 @@ var WidgetManager = /** @class */ (function () {
                         container.className = EMIT_CONTAINER_CLASS;
                         widgetFrame = document.createElement('div');
                         widgetFrame.id = "emit-container-".concat(Date.now());
-                        widgetFrame.className = EMIT_CONTAINER_CLASS;
+                        widgetFrame.className = EMIT_IFRAME_CLASS;
                         iframe = document.createElement('iframe');
+                        console.log("init...", this._widgetUrl, this);
                         iframe.src = this._widgetUrl;
                         iframe.style.position = 'absolute';
                         iframe.style.height = '100%';

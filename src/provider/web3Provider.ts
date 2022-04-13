@@ -152,7 +152,7 @@ export class Web3Manager {
                     const { error, result } = await widgetCommunication.getAccounts(this.config);
                     if (!error && result) {
                         // @ts-ignore
-                        this._selectedAddress = result[0].addresses[this.config.network.chainType];
+                        this._selectedAddress = result[0];
                     }
                     cb(error, result);
                 },
@@ -164,13 +164,15 @@ export class Web3Manager {
                 signMessage: async (msgParams: any, cb: ProviderCallback) => {
                     const widgetCommunication = await this._getWidgetCommunication();
                     const params = { ...msgParams, messageStandard: 'signMessage' };
-                    const { error, result } = await widgetCommunication.signMessage(params, this.config);
+                    const ret:any = await widgetCommunication.signMessage(params, this.config);
+                    const { error, result } = ret;
                     cb(error, result);
                 },
                 signPersonalMessage: async (msgParams: any, cb: ProviderCallback) => {
                     const widgetCommunication = await this._getWidgetCommunication();
                     const params = { ...msgParams, messageStandard: 'signPersonalMessage' };
-                    const { error, result } = await widgetCommunication.signMessage(params, this.config);
+                    const ret:any = await widgetCommunication.signMessage(params, this.config);
+                    const { error, result } = ret;
                     cb(error, result);
                 },
                 signTypedMessage: async (msgParams: any, cb: ProviderCallback) => {
@@ -199,7 +201,8 @@ export class Web3Manager {
             setEngine: (_: any) => _,
             handleRequest: async (payload: any, next: () => {}, end: (error: string | null, result: any) => {}) => {
                 const widgetCommunication = await this._getWidgetCommunication();
-                const { error, result } = await widgetCommunication.relay(payload, this.config);
+                const ret:any = await widgetCommunication.relay(payload, this.config);
+                const { error, result } = ret;
                 if (payload.method === 'net_version') {
                     this._network = result;
                     this.engine.networkVersion = this._network;
@@ -234,7 +237,7 @@ export class Web3Manager {
             }
         });
 
-        this.engine.start();
+        // this.engine.start();
         return this.engine;
     }
 

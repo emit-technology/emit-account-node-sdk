@@ -81,6 +81,7 @@ export class WidgetManager {
         widgetFrame.className = EMIT_IFRAME_CLASS;
 
         const iframe = document.createElement('iframe');
+        console.log("init...",this._widgetUrl,this);
         iframe.src = this._widgetUrl;
         iframe.style.position = 'absolute';
         iframe.style.height = '100%';

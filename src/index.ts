@@ -64,6 +64,10 @@ class EmitBox {
         this._web3Manager.changeNetwork(network);
     }
 
+    setSelectedAddress(address: string) {
+        this._web3Manager.setSelectedAddress(address);
+    }
+
     // async singleton
     async getWidget(): Promise<IWidget> {
         return this._widgetManager.getWidget();
