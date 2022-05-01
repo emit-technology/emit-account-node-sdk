@@ -38,6 +38,7 @@ import { networkAdapter } from './network';
 import { onWindowLoad, validateSecureOrigin } from './utils';
 import { windowLoadHandler, WidgetManager } from './widget';
 import { Web3Manager } from './provider';
+import { DataNode } from "./rpc/dataNode";
 var VERSION = '1.0.1';
 onWindowLoad()
     .then(windowLoadHandler)
@@ -59,6 +60,8 @@ var EmitBox = /** @class */ (function () {
         this.onActiveWalletChanged = this.onActiveWalletChanged.bind(this);
         this.onError = this.onError.bind(this);
         this.showWidget = this.showWidget.bind(this);
+        this.setSelectedAddress = this.setSelectedAddress.bind(this);
+        this.emitDataNode = new DataNode(this.config.network.nodeUrl, this._getWidgetCommunication, this._config);
     }
     Object.defineProperty(EmitBox.prototype, "_widgetManager", {
         get: function () {

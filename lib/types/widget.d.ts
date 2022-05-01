@@ -26,6 +26,13 @@ export interface IPayload {
     method: string;
     params: any[];
 }
+export interface IReply {
+    id: number;
+    jsonrpc: string;
+    method: string;
+    result?: any;
+    error?: any;
+}
 export interface IWidget {
     communication: AsyncMethodReturns<IMethods>;
     widgetFrame: HTMLDivElement;

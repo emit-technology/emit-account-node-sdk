@@ -1,0 +1,1 @@
+{"version":3,"file":"sign.js","sourceRoot":"","sources":["../../../src/types/emit/sign.ts"],"names":[],"mappings":"","sourcesContent":["export interface Sign {\n    r: string\n    s: string\n}\n\nexport interface MsgWithSign<T> {\n    data: T,\n    sign: SignWithAddress\n}\n\nexport interface SignWithAddress {\n    addr: string\n    sign: Sign\n}"]}

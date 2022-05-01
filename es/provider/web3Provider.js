@@ -75,7 +75,7 @@ var Web3Manager = /** @class */ (function () {
         if (this.engine) {
             return this.engine;
         }
-        this.engine = new ProviderEngine();
+        this.engine = new ProviderEngine({ pollingInterval: 60 * 1000 });
         var query = new EthQuery(this.engine);
         if (this.config.network.chainId === "sero") {
             query = new SeroQuery(this.engine);
@@ -326,7 +326,7 @@ var Web3Manager = /** @class */ (function () {
                 console.error(error);
             }
         });
-        // this.engine.start();
+        this.engine.start();
         return this.engine;
     };
     Web3Manager.prototype.clearSubprovider = function (subproviderType) {

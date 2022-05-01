@@ -80,6 +80,21 @@ export class WidgetManager {
         widgetFrame.id = `emit-container-${Date.now()}`;
         widgetFrame.className = EMIT_IFRAME_CLASS;
 
+        const widgetTitle = document.createElement('div');
+        widgetTitle.className = 'emit-widget-title';
+        widgetTitle.innerHTML = 'EMIT CORE - ACCOUNT';
+
+        const widgetUrl = document.createElement('div');
+        widgetUrl.className = 'emit-widget-url';
+        widgetUrl.innerHTML = this._widgetUrl;
+
+        const closeBtm = document.createElement('div');
+        closeBtm.className = 'close-btn';
+        closeBtm.innerHTML = "x";
+        closeBtm.addEventListener('click',ev => {
+            this._setHeight(0);
+        })
+
         const iframe = document.createElement('iframe');
         console.log("init...",this._widgetUrl,this);
         iframe.src = this._widgetUrl;
@@ -94,6 +109,9 @@ export class WidgetManager {
             document.readyState === 'complete' ||
             document.readyState === 'interactive'
         ) {
+            widgetTitle.appendChild(closeBtm);
+            widgetFrame.appendChild(widgetTitle);
+            widgetFrame.appendChild(widgetUrl);
             widgetFrame.appendChild(iframe);
             container.appendChild(widgetFrame);
             document.body.appendChild(container);

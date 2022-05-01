@@ -44,12 +44,11 @@ export class Web3Manager {
             return this.engine;
         }
 
-        this.engine = new ProviderEngine();
+        this.engine = new ProviderEngine({pollingInterval:60*1000});
         let query:IQuery = new EthQuery(this.engine);
         if(this.config.network.chainId === "sero"){
             query = new SeroQuery(this.engine);
         }
-
         this.engine.send = (payload: any, callback: any) => {
             // Web3 1.0 beta.38 (and above) calls `send` with method and parameters
             if (typeof payload === 'string') {
@@ -237,7 +236,7 @@ export class Web3Manager {
             }
         });
 
-        // this.engine.start();
+        this.engine.start();
         return this.engine;
     }
 

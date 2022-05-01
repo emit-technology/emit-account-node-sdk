@@ -3,6 +3,7 @@ import {INetwork, IConfig, IWidget, IDapp} from './types';
 import { onWindowLoad,validateSecureOrigin} from './utils';
 import { windowLoadHandler,WidgetManager } from './widget';
 import {Web3Manager} from './provider';
+import {DataNode} from "./rpc/dataNode";
 
 const VERSION = '$$EMIT_BOX_VERSION$$';
 
@@ -14,6 +15,7 @@ class EmitBox {
     private _widgetManagerInstance?: WidgetManager;
     private _web3ManagerInstance?: Web3Manager;
     private _config?: IConfig;
+    public emitDataNode?: DataNode;
 
     constructor(dapp: IDapp, network: string | INetwork) {
         validateSecureOrigin();
@@ -33,6 +35,9 @@ class EmitBox {
         this.onActiveWalletChanged = this.onActiveWalletChanged.bind(this);
         this.onError = this.onError.bind(this);
         this.showWidget = this.showWidget.bind(this);
+        this.setSelectedAddress = this.setSelectedAddress.bind(this);
+
+        this.emitDataNode = new DataNode(this.config.network.nodeUrl,this._getWidgetCommunication,this._config);
     }
 
     get _widgetManager() {
