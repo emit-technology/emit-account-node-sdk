@@ -2,6 +2,95 @@
 
 import { AsyncMethodReturns } from 'penpal';
 
+export interface AccountModel {
+	accountId?: string;
+	name?: string;
+	passwordHint?: string;
+	avatar?: string;
+	addresses?: {
+		[chainType: number]: string;
+	};
+	key?: string;
+	wallets?: {
+		[chainType: number]: any;
+	};
+	backedUp?: boolean;
+	timestamp?: number;
+	password?: string;
+}
+declare enum ChainType {
+	_ = 0,
+	SERO = 1,
+	ETH = 2,
+	TRON = 3,
+	BSC = 4,
+	EMIT = 5
+}
+export interface FactorSet {
+	settles: Array<Settle>;
+	outs: Array<Out>;
+}
+export interface Factor {
+	category: Category;
+	value: string;
+}
+export interface Category {
+	supplier: string;
+	symbol: string;
+	id: string;
+}
+export interface Out {
+	target: string;
+	factor: Factor;
+}
+export interface DataSet {
+	name: string;
+	data: string;
+}
+export interface PrepareBlock {
+	address: string;
+	blk: Block;
+}
+export interface BlockRef {
+	num: number;
+	hash: string;
+}
+export interface Block {
+	num: number;
+	timestamp: number;
+	parent_hash: string;
+	data_sets: Array<DataSet>;
+	factor_set: FactorSet;
+	data?: string;
+}
+export interface Settle {
+	from: string;
+	num: number;
+	index: number;
+	factor: Factor;
+}
+export interface OutFactor {
+	factor: Factor;
+	timestamp: number;
+}
+export interface BlockWrapped {
+	hash: string;
+	block: Block;
+}
+export interface ConfirmedAccount {
+	addr: string;
+	blk_ref: BlockRef;
+}
+export interface SettleResp {
+	factor: OutFactor;
+	from_index_key: FromIndexKey;
+	settled: boolean;
+}
+export interface FromIndexKey {
+	from: string;
+	num: number;
+	index: number;
+}
 export interface INetwork {
 	nodeUrl: string;
 	chainId?: string;
@@ -26,12 +115,36 @@ export interface IMethods {
 	}>;
 	showWidget: (config: IConfig) => Promise<void>;
 	setConfig: (config: IConfig) => Promise<void>;
+	batchSignMessage: (config: IConfig, signArr: Array<SignWrapped>) => Promise<{
+		error: string;
+		result: Array<SignWrapped>;
+	}>;
+	requestAccount: (config: IConfig) => Promise<{
+		error: string;
+		result: AccountModel;
+	}>;
+	calcGasPrice: (gasLimitHex: string, chain: ChainType, config: IConfig) => Promise<{
+		error: string;
+		result: string;
+	}>;
+}
+export interface SignWrapped {
+	chain: ChainType;
+	msg: any;
+	result?: any;
 }
 export interface IPayload {
 	id: number;
 	jsonrpc: string;
 	method: string;
 	params: any[];
+}
+export interface IReply {
+	id: number;
+	jsonrpc: string;
+	method: string;
+	result?: any;
+	error?: any;
 }
 export interface IWidget {
 	communication: AsyncMethodReturns<IMethods>;
@@ -48,95 +161,35 @@ export interface IDapp {
 	category?: string;
 	contractAddress?: any;
 }
-export interface Block {
-	num: number;
-	timestamp: number;
-	parent_hash: string;
-	data_sets: Array<DataSet>;
-	factor_set: FactorSet;
-	data?: string;
-}
-export interface FactorSet {
-	settles: Array<Settle>;
-	outs: Array<Out>;
-}
-export interface Settle {
-	from: string;
-	num: number;
-	index: number;
-	factor: Factor;
-}
-export interface OutFactor {
-	factor: Factor;
-	timestamp: number;
-}
-export interface Factor {
-	category: Category;
-	value: string;
-}
-export interface Category {
-	field: string;
-	name: string;
-}
-export interface Out {
-	target: string;
-	factor: Factor;
-}
-export interface BlockWrapped {
-	hash: string;
-	block: Block;
-}
-export interface DataSet {
-	name: string;
-	data: string;
-}
-export interface PrepareBlock {
-	address: string;
-	blk: Block;
-}
-export interface BlockRef {
-	num: number;
-	hash: string;
-}
-export interface ConfirmedAccount {
-	addr: string;
-	blk_ref: BlockRef;
-}
-declare enum ChainType {
-	_ = 0,
-	SERO = 1,
-	ETH = 2,
-	TRON = 3,
-	BSC = 4,
-	EMIT = 5
-}
-export interface SettleResp {
-	factor: OutFactor;
-	from_index_key: FromIndexKey;
-	settled: boolean;
-}
-export interface FromIndexKey {
-	from: string;
-	num: number;
-	index: number;
-}
 declare class WidgetManager {
 	private _widgetConfig;
 	private widgetPromise?;
 	private widgetInstance?;
 	private _widgetUrl;
 	private _onActiveWalletChangedCallback?;
+	private _onActiveAccountChangedCallback?;
 	private _onErrorCallback;
 	constructor(_widgetConfig: IConfig);
 	getWidget(): Promise<IWidget>;
 	setOnActiveWalletChangedCallback(callback: (walletAddress: string) => void): void;
+	setOnActiveAccountChangedCallback(callback: (account: AccountModel) => void): void;
 	setOnErrorCallback(callback: (error: Error) => void): void;
 	showWidget(): Promise<void>;
+	requestAccount(): Promise<{
+		error: string;
+		result: AccountModel;
+	}>;
+	calcGasPrice(gasLimitHex: string, chain: ChainType): Promise<{
+		error: string;
+		result: string;
+	}>;
+	batchSignMsg(signArr: Array<SignWrapped>): Promise<Array<SignWrapped>>;
 	private static _checkIfWidgetAlreadyInitialized;
 	private _initWidget;
 	private _setHeight;
 	private static _getWindowSize;
 	private _onActiveWalletChanged;
+	private _onActiveAccountChanged;
 	private hasOnActiveWalletChanged;
 	private _onError;
 }
@@ -189,12 +242,23 @@ declare class EmitBox {
 	private _getWidgetCommunication;
 	get web3Provider(): any;
 	get provider(): any;
+	newProvider(config: IConfig): any;
 	changeNetwork(network: string | INetwork): void;
 	setSelectedAddress(address: string): void;
 	getWidget(): Promise<IWidget>;
 	onActiveWalletChanged(callback: (walletAddress: string) => void): void;
+	onActiveAccountChanged(callback: (account: AccountModel) => void): void;
 	onError(callback: (error: Error) => void): void;
 	showWidget(): Promise<void>;
+	batchSignMsg(signArr: Array<SignWrapped>): Promise<SignWrapped[]>;
+	requestAccount(): Promise<{
+		error: string;
+		result: AccountModel;
+	}>;
+	calcGasPrice(gasLimitHex: string, chain: ChainType): Promise<{
+		error: string;
+		result: string;
+	}>;
 	private _validateParams;
 }
 export default EmitBox;

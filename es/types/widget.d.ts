@@ -1,4 +1,5 @@
 import { IConfig } from "./";
+import { AccountModel, ChainType } from '@emit-technology/emit-lib';
 import { AsyncMethodReturns } from 'penpal';
 export interface IMethods {
     getAccounts: (config: IConfig) => Promise<{
@@ -19,6 +20,23 @@ export interface IMethods {
     }>;
     showWidget: (config: IConfig) => Promise<void>;
     setConfig: (config: IConfig) => Promise<void>;
+    batchSignMessage: (config: IConfig, signArr: Array<SignWrapped>) => Promise<{
+        error: string;
+        result: Array<SignWrapped>;
+    }>;
+    requestAccount: (config: IConfig) => Promise<{
+        error: string;
+        result: AccountModel;
+    }>;
+    calcGasPrice: (gasLimitHex: string, chain: ChainType, config: IConfig) => Promise<{
+        error: string;
+        result: string;
+    }>;
+}
+export interface SignWrapped {
+    chain: ChainType;
+    msg: any;
+    result?: any;
 }
 export interface IPayload {
     id: number;

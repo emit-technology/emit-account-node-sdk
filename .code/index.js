@@ -1,4 +1,14 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -40,6 +50,7 @@ var network_1 = require("./network");
 var utils_1 = require("./utils");
 var widget_1 = require("./widget");
 var provider_1 = require("./provider");
+var dataNode_1 = require("./rpc/dataNode");
 var VERSION = '$$EMIT_BOX_VERSION$$';
 utils_1.onWindowLoad()
     .then(widget_1.windowLoadHandler)
@@ -55,12 +66,14 @@ var EmitBox = /** @class */ (function () {
         };
         this._getWidgetCommunication = this._getWidgetCommunication.bind(this);
         this._widgetManagerInstance = new widget_1.WidgetManager(this.config);
-        this._web3ManagerInstance = new provider_1.Web3Manager(this.config, this._getWidgetCommunication);
         this.changeNetwork = this.changeNetwork.bind(this);
         this.getWidget = this.getWidget.bind(this);
         this.onActiveWalletChanged = this.onActiveWalletChanged.bind(this);
         this.onError = this.onError.bind(this);
         this.showWidget = this.showWidget.bind(this);
+        this.setSelectedAddress = this.setSelectedAddress.bind(this);
+        this.newProvider = this.newProvider.bind(this);
+        this.emitDataNode = new dataNode_1.DataNode(this.config.network.nodeUrl, this._getWidgetCommunication, this._config);
     }
     Object.defineProperty(EmitBox.prototype, "_widgetManager", {
         get: function () {
@@ -71,6 +84,9 @@ var EmitBox = /** @class */ (function () {
     });
     Object.defineProperty(EmitBox.prototype, "_web3Manager", {
         get: function () {
+            if (!this._web3ManagerInstance) {
+                this._web3ManagerInstance = new provider_1.Web3Manager(this.config, this._getWidgetCommunication);
+            }
             return this._web3ManagerInstance;
         },
         enumerable: false,
@@ -108,8 +124,14 @@ var EmitBox = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    EmitBox.prototype.newProvider = function (config) {
+        return new provider_1.Web3Manager(config, this._getWidgetCommunication).provider;
+    };
     EmitBox.prototype.changeNetwork = function (network) {
         this._web3Manager.changeNetwork(network);
+    };
+    EmitBox.prototype.setSelectedAddress = function (address) {
+        this._web3Manager.setSelectedAddress(address);
     };
     // async singleton
     EmitBox.prototype.getWidget = function () {
@@ -123,6 +145,9 @@ var EmitBox = /** @class */ (function () {
     EmitBox.prototype.onActiveWalletChanged = function (callback) {
         this._widgetManager.setOnActiveWalletChangedCallback(callback);
     };
+    EmitBox.prototype.onActiveAccountChanged = function (callback) {
+        this._widgetManager.setOnActiveAccountChangedCallback(callback);
+    };
     EmitBox.prototype.onError = function (callback) {
         this._widgetManager.setOnErrorCallback(callback);
     };
@@ -134,6 +159,27 @@ var EmitBox = /** @class */ (function () {
             });
         });
     };
+    EmitBox.prototype.batchSignMsg = function (signArr) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this._widgetManager.batchSignMsg(signArr)];
+            });
+        });
+    };
+    EmitBox.prototype.requestAccount = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this._widgetManager.requestAccount()];
+            });
+        });
+    };
+    EmitBox.prototype.calcGasPrice = function (gasLimitHex, chain) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this._widgetManager.calcGasPrice(gasLimitHex, chain)];
+            });
+        });
+    };
     // internal methods
     EmitBox.prototype._validateParams = function (network) {
         if (!network) {
@@ -142,5 +188,6 @@ var EmitBox = /** @class */ (function () {
     };
     return EmitBox;
 }());
+__exportStar(require("./types"), exports);
 exports.default = EmitBox;
 //# sourceMappingURL=index.js.map

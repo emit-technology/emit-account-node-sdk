@@ -10,6 +10,7 @@ const FilterSubprovider = require('web3-provider-engine/dist/es5/subproviders/fi
 const HookedWalletSubprovider = require('web3-provider-engine/dist/es5/subproviders/hooked-wallet.js');
 const NonceSubprovider = require('web3-provider-engine/dist/es5/subproviders/nonce-tracker.js');
 const SubscriptionsSubprovider = require('web3-provider-engine/dist/es5/subproviders/subscriptions.js');
+// const RpcSubprovider = require('web3-provider-engine/subproviders/rpc.js');
 
 type ProviderCallback = (error: string | null, result: any) => void;
 
@@ -44,11 +45,12 @@ export class Web3Manager {
             return this.engine;
         }
 
-        this.engine = new ProviderEngine({pollingInterval:60*1000});
+        this.engine = new ProviderEngine({pollingInterval:5*60*1000});//300seconds
         let query:IQuery = new EthQuery(this.engine);
         if(this.config.network.chainId === "sero"){
             query = new SeroQuery(this.engine);
         }
+
         this.engine.send = (payload: any, callback: any) => {
             // Web3 1.0 beta.38 (and above) calls `send` with method and parameters
             if (typeof payload === 'string') {
@@ -113,10 +115,10 @@ export class Web3Manager {
         this.engine.addProvider(
             new FixtureSubprovider({
                 web3_clientVersion: `EMIT/v${this.config.version}/javascript`,
-                net_listening: true,
+                net_listening: false,
                 eth_hashrate: '0x00',
                 eth_mining: false,
-                eth_syncing: true,
+                eth_syncing: false,
             }),
         );
 
@@ -131,6 +133,11 @@ export class Web3Manager {
 
         // pending nonce
         this.engine.addProvider(new NonceSubprovider());
+        //
+        // // data source
+        // this.engine.addProvider(new RpcSubprovider({
+        //     rpcUrl: this.config.network.nodeUrl,
+        // }));
 
         // set default id when needed
         this.engine.addProvider({
@@ -186,13 +193,19 @@ export class Web3Manager {
                     const { error, result } = await widgetCommunication.signMessage(params, this.config);
                     cb(error, result);
                 },
+                signTypedMessageV4: async (msgParams: any, cb: ProviderCallback) => {
+                    const widgetCommunication = await this._getWidgetCommunication();
+                    const params = { ...msgParams, messageStandard: 'signTypedMessageV4' };
+                    const { error, result } = await widgetCommunication.signMessage(params, this.config);
+                    cb(error, result);
+                },
                 estimateGas: async (txParams: any, cb: ProviderCallback) => {
                     const gas = await getTxGas(query, txParams);
                     cb(null, gas);
                 },
-                getGasPrice: async (cb: ProviderCallback) => {
-                    cb(null, '');
-                },
+                // getGasPrice: async (cb: ProviderCallback) => {
+                //     cb(null, "" );
+                // },
             }),
         );
 

@@ -1,6 +1,7 @@
 import Rpc from "./index";
-import { BlockWrapped, DataSet, Factor, FactorSet, PrepareBlock, ConfirmedAccount } from "../types/emit";
-import { IConfig, IMethods, SettleResp } from "../types";
+import { BlockWrapped, DataSet, Factor, FactorSet, PrepareBlock } from "@emit-technology/emit-lib";
+import { ConfirmedAccount, SettleResp } from "@emit-technology/emit-lib";
+import { IConfig, IMethods } from "../types";
 import { AsyncMethodReturns } from "penpal";
 export declare class DataNode extends Rpc {
     private getWidgetCommunication;

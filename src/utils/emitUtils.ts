@@ -1,4 +1,4 @@
-import { Category } from "../types";
+import { Category } from "@emit-technology/emit-lib";
 import BigNumber from "bignumber.js";
 const BN = require("bn.js");
 
@@ -58,10 +58,10 @@ class EmitUtils {
   };
 
   getCategoryName = (category: Category): string => {
-    const name = this.fromHex(category.name);
+    const name = this.fromHex(category.symbol);
     if (
-      category.field === NODE_ADDRESS() &&
-      category.name ===
+      category.supplier === NODE_ADDRESS() &&
+      category.symbol ===
         "0000000000000000000000000000000000000000000000000000000000000000"
     ) {
       return "EASTER";

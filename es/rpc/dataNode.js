@@ -50,7 +50,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import Rpc from "./index";
-import { getDefaultHash, } from "../types/emit";
+import { getDefaultHash, } from "@emit-technology/emit-lib";
 import { METHOD } from "./method";
 import emitUtils from "../utils/emitUtils";
 import BigNumber from "bignumber.js";
@@ -199,17 +199,23 @@ var DataNode = /** @class */ (function (_super) {
             });
         }); };
         _this.prepareBlock = function (prepareBlock) { return __awaiter(_this, void 0, void 0, function () {
-            var signData, rest;
+            var widgetCommunication, signData, rest;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.getWidgetCommunication()];
                     case 1:
-                        signData = (_a.sent()).signTransaction(prepareBlock, this.config);
+                        widgetCommunication = _a.sent();
+                        return [4 /*yield*/, widgetCommunication.signTransaction(prepareBlock, this.config)];
+                    case 2:
+                        signData = _a.sent();
                         if (!signData) {
                             return [2 /*return*/, Promise.reject("sign error")];
                         }
-                        return [4 /*yield*/, this.post(METHOD.prepareBlock, [signData])];
-                    case 2:
+                        if (signData.error) {
+                            return [2 /*return*/, Promise.reject(signData.error)];
+                        }
+                        return [4 /*yield*/, this.post(METHOD.prepareBlock, [signData.result])];
+                    case 3:
                         rest = _a.sent();
                         return [2 /*return*/, Promise.resolve(rest)];
                 }

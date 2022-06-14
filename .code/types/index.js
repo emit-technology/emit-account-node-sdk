@@ -13,5 +13,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./network"), exports);
 __exportStar(require("./widget"), exports);
 __exportStar(require("./config"), exports);
-__exportStar(require("./emit"), exports);
 //# sourceMappingURL=index.js.map

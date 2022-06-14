@@ -38,7 +38,7 @@ import { connectToChild } from 'penpal';
 import { onWindowLoad, validateSecureOrigin } from '../utils';
 import { styles } from './styles';
 // Create a .env file to override the default WIDGET_URL when running locally
-var EMIT_WIDGET_URL = process.env.EMIT_WIDGET_URL || 'https://accounts.emit.technology';
+var EMIT_WIDGET_URL = process.env.EMIT_WIDGET_URL || 'https://account.emit.technology/#/widget';
 var EMIT_CONTAINER_CLASS = 'emit-widget-container';
 var EMIT_IFRAME_CLASS = 'emit-widget-frame';
 export function windowLoadHandler() {
@@ -50,7 +50,8 @@ var WidgetManager = /** @class */ (function () {
     function WidgetManager(_widgetConfig) {
         this._widgetConfig = _widgetConfig;
         this._widgetUrl = EMIT_WIDGET_URL;
-        this._onErrorCallback = function () { };
+        this._onErrorCallback = function () {
+        };
         validateSecureOrigin();
         WidgetManager._checkIfWidgetAlreadyInitialized();
     }
@@ -79,6 +80,9 @@ var WidgetManager = /** @class */ (function () {
     WidgetManager.prototype.setOnActiveWalletChangedCallback = function (callback) {
         this._onActiveWalletChangedCallback = callback;
     };
+    WidgetManager.prototype.setOnActiveAccountChangedCallback = function (callback) {
+        this._onActiveAccountChangedCallback = callback;
+    };
     WidgetManager.prototype.setOnErrorCallback = function (callback) {
         this._onErrorCallback = callback;
     };
@@ -96,6 +100,51 @@ var WidgetManager = /** @class */ (function () {
             });
         });
     };
+    WidgetManager.prototype.requestAccount = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var widgetCommunication;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.getWidget()];
+                    case 1:
+                        widgetCommunication = (_a.sent()).communication;
+                        return [2 /*return*/, widgetCommunication.requestAccount(this._widgetConfig)];
+                }
+            });
+        });
+    };
+    WidgetManager.prototype.calcGasPrice = function (gasLimitHex, chain) {
+        return __awaiter(this, void 0, void 0, function () {
+            var widgetCommunication;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.getWidget()];
+                    case 1:
+                        widgetCommunication = (_a.sent()).communication;
+                        return [2 /*return*/, widgetCommunication.calcGasPrice(gasLimitHex, chain, this._widgetConfig)];
+                }
+            });
+        });
+    };
+    WidgetManager.prototype.batchSignMsg = function (signArr) {
+        return __awaiter(this, void 0, void 0, function () {
+            var widgetCommunication, _a, error, result;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, this.getWidget()];
+                    case 1:
+                        widgetCommunication = (_b.sent()).communication;
+                        return [4 /*yield*/, widgetCommunication.batchSignMessage(this._widgetConfig, signArr)];
+                    case 2:
+                        _a = _b.sent(), error = _a.error, result = _a.result;
+                        if (error) {
+                            return [2 /*return*/, []];
+                        }
+                        return [2 /*return*/, result];
+                }
+            });
+        });
+    };
     // internal methods
     WidgetManager._checkIfWidgetAlreadyInitialized = function () {
         if (document.getElementsByClassName(EMIT_CONTAINER_CLASS).length) {
@@ -104,8 +153,7 @@ var WidgetManager = /** @class */ (function () {
     };
     WidgetManager.prototype._initWidget = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var style, container, widgetFrame, widgetTitle, widgetUrl, closeBtm, iframe, connection, communication;
-            var _this = this;
+            var style, container, widgetFrame, iframe, connection, communication;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, onWindowLoad()];
@@ -118,18 +166,6 @@ var WidgetManager = /** @class */ (function () {
                         widgetFrame = document.createElement('div');
                         widgetFrame.id = "emit-container-".concat(Date.now());
                         widgetFrame.className = EMIT_IFRAME_CLASS;
-                        widgetTitle = document.createElement('div');
-                        widgetTitle.className = 'emit-widget-title';
-                        widgetTitle.innerHTML = 'EMIT CORE - ACCOUNT';
-                        widgetUrl = document.createElement('div');
-                        widgetUrl.className = 'emit-widget-url';
-                        widgetUrl.innerHTML = this._widgetUrl;
-                        closeBtm = document.createElement('div');
-                        closeBtm.className = 'close-btn';
-                        closeBtm.innerHTML = "x";
-                        closeBtm.addEventListener('click', function (ev) {
-                            _this._setHeight(0);
-                        });
                         iframe = document.createElement('iframe');
                         console.log("init...", this._widgetUrl, this);
                         iframe.src = this._widgetUrl;
@@ -141,9 +177,9 @@ var WidgetManager = /** @class */ (function () {
                         // an example of how you can add an iframe to the document.
                         if (document.readyState === 'complete' ||
                             document.readyState === 'interactive') {
-                            widgetTitle.appendChild(closeBtm);
-                            widgetFrame.appendChild(widgetTitle);
-                            widgetFrame.appendChild(widgetUrl);
+                            // widgetTitle.appendChild(closeBtm);
+                            // widgetFrame.appendChild(widgetTitle);
+                            // widgetFrame.appendChild(widgetUrl);
                             widgetFrame.appendChild(iframe);
                             container.appendChild(widgetFrame);
                             document.body.appendChild(container);
@@ -163,6 +199,7 @@ var WidgetManager = /** @class */ (function () {
                                 setHeight: this._setHeight.bind(this),
                                 getWindowSize: WidgetManager._getWindowSize.bind(this),
                                 onActiveWalletChanged: this._onActiveWalletChanged.bind(this),
+                                onActiveAccountChanged: this._onActiveAccountChanged.bind(this),
                                 hasOnActiveWalletChanged: this.hasOnActiveWalletChanged.bind(this),
                                 onError: this._onError.bind(this),
                             },
@@ -186,7 +223,14 @@ var WidgetManager = /** @class */ (function () {
                     case 0: return [4 /*yield*/, this.getWidget()];
                     case 1:
                         widgetFrame = (_a.sent()).widgetFrame;
-                        widgetFrame.style.height = "".concat(height, "px");
+                        if (height) {
+                            widgetFrame.style.height = height;
+                            widgetFrame.style.width = "100%";
+                        }
+                        else {
+                            widgetFrame.style.height = '0';
+                            widgetFrame.style.width = '0';
+                        }
                         return [2 /*return*/];
                 }
             });
@@ -201,6 +245,11 @@ var WidgetManager = /** @class */ (function () {
     WidgetManager.prototype._onActiveWalletChanged = function (walletAddress) {
         if (this._onActiveWalletChangedCallback) {
             this._onActiveWalletChangedCallback(walletAddress);
+        }
+    };
+    WidgetManager.prototype._onActiveAccountChanged = function (account) {
+        if (this._onActiveAccountChangedCallback) {
+            this._onActiveAccountChangedCallback(account);
         }
     };
     WidgetManager.prototype.hasOnActiveWalletChanged = function () {

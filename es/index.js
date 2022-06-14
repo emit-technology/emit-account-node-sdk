@@ -39,7 +39,7 @@ import { onWindowLoad, validateSecureOrigin } from './utils';
 import { windowLoadHandler, WidgetManager } from './widget';
 import { Web3Manager } from './provider';
 import { DataNode } from "./rpc/dataNode";
-var VERSION = '1.0.1';
+var VERSION = '1.1.1';
 onWindowLoad()
     .then(windowLoadHandler)
     .catch(function () { }); // Prevents unhandledPromiseRejectionWarning, which happens when using React SSR;
@@ -54,13 +54,13 @@ var EmitBox = /** @class */ (function () {
         };
         this._getWidgetCommunication = this._getWidgetCommunication.bind(this);
         this._widgetManagerInstance = new WidgetManager(this.config);
-        this._web3ManagerInstance = new Web3Manager(this.config, this._getWidgetCommunication);
         this.changeNetwork = this.changeNetwork.bind(this);
         this.getWidget = this.getWidget.bind(this);
         this.onActiveWalletChanged = this.onActiveWalletChanged.bind(this);
         this.onError = this.onError.bind(this);
         this.showWidget = this.showWidget.bind(this);
         this.setSelectedAddress = this.setSelectedAddress.bind(this);
+        this.newProvider = this.newProvider.bind(this);
         this.emitDataNode = new DataNode(this.config.network.nodeUrl, this._getWidgetCommunication, this._config);
     }
     Object.defineProperty(EmitBox.prototype, "_widgetManager", {
@@ -72,6 +72,9 @@ var EmitBox = /** @class */ (function () {
     });
     Object.defineProperty(EmitBox.prototype, "_web3Manager", {
         get: function () {
+            if (!this._web3ManagerInstance) {
+                this._web3ManagerInstance = new Web3Manager(this.config, this._getWidgetCommunication);
+            }
             return this._web3ManagerInstance;
         },
         enumerable: false,
@@ -109,6 +112,9 @@ var EmitBox = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    EmitBox.prototype.newProvider = function (config) {
+        return new Web3Manager(config, this._getWidgetCommunication).provider;
+    };
     EmitBox.prototype.changeNetwork = function (network) {
         this._web3Manager.changeNetwork(network);
     };
@@ -127,6 +133,9 @@ var EmitBox = /** @class */ (function () {
     EmitBox.prototype.onActiveWalletChanged = function (callback) {
         this._widgetManager.setOnActiveWalletChangedCallback(callback);
     };
+    EmitBox.prototype.onActiveAccountChanged = function (callback) {
+        this._widgetManager.setOnActiveAccountChangedCallback(callback);
+    };
     EmitBox.prototype.onError = function (callback) {
         this._widgetManager.setOnErrorCallback(callback);
     };
@@ -138,6 +147,27 @@ var EmitBox = /** @class */ (function () {
             });
         });
     };
+    EmitBox.prototype.batchSignMsg = function (signArr) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this._widgetManager.batchSignMsg(signArr)];
+            });
+        });
+    };
+    EmitBox.prototype.requestAccount = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this._widgetManager.requestAccount()];
+            });
+        });
+    };
+    EmitBox.prototype.calcGasPrice = function (gasLimitHex, chain) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this._widgetManager.calcGasPrice(gasLimitHex, chain)];
+            });
+        });
+    };
     // internal methods
     EmitBox.prototype._validateParams = function (network) {
         if (!network) {
@@ -146,5 +176,6 @@ var EmitBox = /** @class */ (function () {
     };
     return EmitBox;
 }());
+export * from './types';
 export default EmitBox;
 //# sourceMappingURL=index.js.map

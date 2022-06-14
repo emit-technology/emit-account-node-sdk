@@ -1,4 +1,4 @@
-import { Category } from "../types";
+import { Category } from "@emit-technology/emit-lib";
 import BigNumber from "bignumber.js";
 declare class EmitUtils {
     strToHex: (v: string, len?: number) => string;

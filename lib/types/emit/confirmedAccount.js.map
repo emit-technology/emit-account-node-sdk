@@ -1,1 +1,0 @@
-{"version":3,"file":"confirmedAccount.js","sourceRoot":"","sources":["../../../src/types/emit/confirmedAccount.ts"],"names":[],"mappings":"","sourcesContent":["import { BlockRef } from \"./block\";\n\nexport interface ConfirmedAccount {\n  addr: string;\n  blk_ref: BlockRef;\n}\n"]}

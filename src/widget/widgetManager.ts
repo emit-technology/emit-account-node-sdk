@@ -1,12 +1,13 @@
 import {connectToChild} from 'penpal';
 
-import { IConfig, IMethods, IWidget } from '../types';
-
-import { onWindowLoad,validateSecureOrigin } from '../utils';
-import { styles } from './styles';
+import {IConfig, IMethods, IWidget, SignWrapped} from '../types';
+import {AccountModel} from '@emit-technology/emit-lib';
+import {onWindowLoad, validateSecureOrigin} from '../utils';
+import {styles} from './styles';
+import {ChainType} from "@emit-technology/emit-lib";
 
 // Create a .env file to override the default WIDGET_URL when running locally
-const EMIT_WIDGET_URL = process.env.EMIT_WIDGET_URL || 'https://accounts.emit.technology';
+const EMIT_WIDGET_URL = process.env.EMIT_WIDGET_URL || 'https://account.emit.technology/#/widget';
 const EMIT_CONTAINER_CLASS = 'emit-widget-container';
 const EMIT_IFRAME_CLASS = 'emit-widget-frame';
 
@@ -23,7 +24,9 @@ export class WidgetManager {
     private widgetInstance?: IWidget;
     private _widgetUrl = EMIT_WIDGET_URL;
     private _onActiveWalletChangedCallback?: (walletAddress: string) => void;
-    private _onErrorCallback: (error: Error) => void = () => {};
+    private _onActiveAccountChangedCallback?: (account: AccountModel) => void;
+    private _onErrorCallback: (error: Error) => void = () => {
+    };
 
     constructor(private _widgetConfig: IConfig) {
         validateSecureOrigin();
@@ -40,10 +43,15 @@ export class WidgetManager {
         }
         return this.widgetInstance;
     }
+
     // Population by the dev of SDK callbacks that might be invoked by the widget
 
     setOnActiveWalletChangedCallback(callback: (walletAddress: string) => void) {
         this._onActiveWalletChangedCallback = callback;
+    }
+
+    setOnActiveAccountChangedCallback(callback: (account: AccountModel) => void) {
+        this._onActiveAccountChangedCallback = callback;
     }
 
     setOnErrorCallback(callback: (error: Error) => void) {
@@ -55,6 +63,24 @@ export class WidgetManager {
     async showWidget() {
         const widgetCommunication = (await this.getWidget()).communication;
         return widgetCommunication.showWidget(this._widgetConfig);
+    }
+
+    async requestAccount() {
+        const widgetCommunication = (await this.getWidget()).communication;
+        return widgetCommunication.requestAccount(this._widgetConfig);
+    }
+
+    async calcGasPrice(gasLimitHex:string,chain:ChainType) {
+        const widgetCommunication = (await this.getWidget()).communication;
+        return widgetCommunication.calcGasPrice(gasLimitHex,chain,this._widgetConfig);
+    }
+    async batchSignMsg(signArr: Array<SignWrapped>): Promise<Array<SignWrapped>> {
+        const widgetCommunication = (await this.getWidget()).communication;
+        const {error, result} = await widgetCommunication.batchSignMessage(this._widgetConfig,signArr)
+        if (error) {
+            return []
+        }
+        return result;
     }
 
     // internal methods
@@ -80,23 +106,23 @@ export class WidgetManager {
         widgetFrame.id = `emit-container-${Date.now()}`;
         widgetFrame.className = EMIT_IFRAME_CLASS;
 
-        const widgetTitle = document.createElement('div');
-        widgetTitle.className = 'emit-widget-title';
-        widgetTitle.innerHTML = 'EMIT CORE - ACCOUNT';
+        // const widgetTitle = document.createElement('div');
+        // widgetTitle.className = 'emit-widget-title';
+        // widgetTitle.innerHTML = 'powered by emit';
 
-        const widgetUrl = document.createElement('div');
-        widgetUrl.className = 'emit-widget-url';
-        widgetUrl.innerHTML = this._widgetUrl;
+        // const widgetUrl = document.createElement('div');
+        // widgetUrl.className = 'emit-widget-url';
+        // widgetUrl.innerHTML = this._widgetUrl;
 
-        const closeBtm = document.createElement('div');
-        closeBtm.className = 'close-btn';
-        closeBtm.innerHTML = "x";
-        closeBtm.addEventListener('click',ev => {
-            this._setHeight(0);
-        })
+        // const closeBtm = document.createElement('div');
+        // closeBtm.className = 'close-btn';
+        // closeBtm.innerHTML = "x";
+        // closeBtm.addEventListener('click', ev => {
+        //     this._setHeight(0);
+        // })
 
         const iframe = document.createElement('iframe');
-        console.log("init...",this._widgetUrl,this);
+        console.log("init...", this._widgetUrl, this);
         iframe.src = this._widgetUrl;
         iframe.style.position = 'absolute';
         iframe.style.height = '100%';
@@ -109,9 +135,9 @@ export class WidgetManager {
             document.readyState === 'complete' ||
             document.readyState === 'interactive'
         ) {
-            widgetTitle.appendChild(closeBtm);
-            widgetFrame.appendChild(widgetTitle);
-            widgetFrame.appendChild(widgetUrl);
+            // widgetTitle.appendChild(closeBtm);
+            // widgetFrame.appendChild(widgetTitle);
+            // widgetFrame.appendChild(widgetUrl);
             widgetFrame.appendChild(iframe);
             container.appendChild(widgetFrame);
             document.body.appendChild(container);
@@ -126,11 +152,12 @@ export class WidgetManager {
         }
 
         const connection = connectToChild<IMethods>({
-            iframe:iframe,
+            iframe: iframe,
             methods: {
                 setHeight: this._setHeight.bind(this),
                 getWindowSize: WidgetManager._getWindowSize.bind(this),
                 onActiveWalletChanged: this._onActiveWalletChanged.bind(this),
+                onActiveAccountChanged: this._onActiveAccountChanged.bind(this),
                 hasOnActiveWalletChanged: this.hasOnActiveWalletChanged.bind(this),
                 onError: this._onError.bind(this),
             },
@@ -139,24 +166,36 @@ export class WidgetManager {
         const communication = await connection.promise;
         await communication.setConfig(this._widgetConfig);
 
-        return { communication, widgetFrame };
+        return {communication, widgetFrame};
     }
 
-    private async _setHeight(height: number) {
+    private async _setHeight(height?: string) {
         const widgetFrame = (await this.getWidget()).widgetFrame;
-        widgetFrame.style.height = `${height}px`;
+        if(height){
+            widgetFrame.style.height = height;
+            widgetFrame.style.width = `100%` ;
+        }else{
+            widgetFrame.style.height = '0';
+            widgetFrame.style.width =  '0';
+        }
     }
 
     private static _getWindowSize() {
         const body = document.getElementsByTagName('body')[0];
         const width = window.innerWidth || document.documentElement.clientWidth || body.clientWidth;
         const height = window.innerHeight || document.documentElement.clientHeight || body.clientHeight;
-        return { width, height };
+        return {width, height};
     }
 
     private _onActiveWalletChanged(walletAddress: string) {
         if (this._onActiveWalletChangedCallback) {
             this._onActiveWalletChangedCallback(walletAddress);
+        }
+    }
+
+    private _onActiveAccountChanged(account: AccountModel) {
+        if (this._onActiveAccountChangedCallback) {
+            this._onActiveAccountChangedCallback(account);
         }
     }
 

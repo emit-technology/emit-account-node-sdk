@@ -1,5 +1,5 @@
 import { INetwork } from '../types';
-import {ChainType} from '../types';
+import {ChainType} from '@emit-technology/emit-lib';
 
 export function networkAdapter(network: string | INetwork) {
     const networkObj = typeof network === 'string' ? Object.assign({}, networks[network]) : network;

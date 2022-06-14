@@ -1,6 +1,6 @@
 {
   "name": "@emit-technology/emit-account-node-sdk",
-  "version": "1.0.1",
+  "version": "1.1.1",
   "description": "EMIT Account SDK",
   "homepage": "https://emit.technology",
   "main": "lib/index.js",
@@ -53,7 +53,8 @@
     "ts-node": "^10.7.0",
     "typescript": "^4.6.2",
     "webpack": "4.28.3",
-    "webpack-cli": "3.1.2"
+    "webpack-cli": "3.1.2",
+    "@emit-technology/emit-lib": "file:../emit-lib"
   },
   "dependencies": {
     "ethereumjs-util": "^7.1.4",

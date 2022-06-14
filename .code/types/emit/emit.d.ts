@@ -1,12 +1,11 @@
 export interface AccountModel {
     accountId?: string;
     name: string;
-    password?: string;
     avatar?: string;
     hint?: string;
-    addresses?: Array<{
+    addresses?: {
         [chainType: number]: string;
-    }>;
+    };
     createType?: CreateType;
 }
 export declare enum CreateType {

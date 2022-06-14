@@ -1,9 +1,11 @@
 import { networkAdapter } from './network';
-import {INetwork, IConfig, IWidget, IDapp} from './types';
+import {INetwork, IConfig, IWidget, IDapp, SignWrapped} from './types';
+import {AccountModel} from '@emit-technology/emit-lib';
 import { onWindowLoad,validateSecureOrigin} from './utils';
 import { windowLoadHandler,WidgetManager } from './widget';
 import {Web3Manager} from './provider';
 import {DataNode} from "./rpc/dataNode";
+import {ChainType} from "@emit-technology/emit-lib";
 
 const VERSION = '$$EMIT_BOX_VERSION$$';
 
@@ -28,7 +30,6 @@ class EmitBox {
 
         this._getWidgetCommunication = this._getWidgetCommunication.bind(this);
         this._widgetManagerInstance = new WidgetManager(this.config);
-        this._web3ManagerInstance = new Web3Manager(this.config, this._getWidgetCommunication);
 
         this.changeNetwork = this.changeNetwork.bind(this);
         this.getWidget = this.getWidget.bind(this);
@@ -36,6 +37,7 @@ class EmitBox {
         this.onError = this.onError.bind(this);
         this.showWidget = this.showWidget.bind(this);
         this.setSelectedAddress = this.setSelectedAddress.bind(this);
+        this.newProvider = this.newProvider.bind(this);
 
         this.emitDataNode = new DataNode(this.config.network.nodeUrl,this._getWidgetCommunication,this._config);
     }
@@ -45,6 +47,9 @@ class EmitBox {
     }
 
     get _web3Manager() {
+        if(!this._web3ManagerInstance){
+            this._web3ManagerInstance = new Web3Manager(this.config, this._getWidgetCommunication);
+        }
         return this._web3ManagerInstance!;
     }
 
@@ -65,6 +70,10 @@ class EmitBox {
         return this.web3Provider;
     }
 
+    newProvider(config:IConfig){
+        return new Web3Manager(config, this._getWidgetCommunication).provider;
+    }
+
     changeNetwork(network: string | INetwork) {
         this._web3Manager.changeNetwork(network);
     }
@@ -79,9 +88,12 @@ class EmitBox {
     }
 
     // Population by the dev of SDK callbacks that might be invoked by the widget
-
     onActiveWalletChanged(callback: (walletAddress: string) => void) {
         this._widgetManager.setOnActiveWalletChangedCallback(callback);
+    }
+
+    onActiveAccountChanged(callback: (account: AccountModel) => void) {
+        this._widgetManager.setOnActiveAccountChangedCallback(callback);
     }
 
     onError(callback: (error: Error) => void) {
@@ -91,6 +103,18 @@ class EmitBox {
     // SDK methods that could be invoked by the user and handled by the widget
     async showWidget() {
         return this._widgetManager.showWidget();
+    }
+
+    async batchSignMsg(signArr:Array<SignWrapped>){
+        return this._widgetManager.batchSignMsg(signArr);
+    }
+
+    async requestAccount(){
+        return this._widgetManager.requestAccount();
+    }
+
+    async calcGasPrice(gasLimitHex:string,chain:ChainType){
+        return this._widgetManager.calcGasPrice(gasLimitHex,chain);
     }
 
     // internal methods
@@ -103,5 +127,6 @@ class EmitBox {
         }
     }
 }
+export * from './types';
 
 export default EmitBox;
