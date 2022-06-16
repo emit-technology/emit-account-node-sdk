@@ -41,7 +41,7 @@ var penpal_1 = require("penpal");
 var utils_1 = require("../utils");
 var styles_1 = require("./styles");
 // Create a .env file to override the default WIDGET_URL when running locally
-var EMIT_WIDGET_URL = process.env.EMIT_WIDGET_URL || 'https://account.emit.technology/#/widget';
+var EMIT_WIDGET_URL = process.env.EMIT_WIDGET_URL || 'https://accounts.emit.technology/#/widget';
 var EMIT_CONTAINER_CLASS = 'emit-widget-container';
 var EMIT_IFRAME_CLASS = 'emit-widget-frame';
 function windowLoadHandler() {

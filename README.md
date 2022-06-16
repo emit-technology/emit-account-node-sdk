@@ -91,7 +91,7 @@ or
 //Batch sign
 emitBox.batchSignMsg([{
     chain: ChainType.EMIT,
-    msg: "TEST"
+    msg:  {data:"0x64c2d1dab59dee2c7741acee3826dad50cdb7f6adb28a159b1bc6aa5374a2b24"}
 }]).then((data:any)=>console.log(data))
 
 ```

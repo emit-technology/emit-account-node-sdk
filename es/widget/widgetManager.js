@@ -38,7 +38,7 @@ import { connectToChild } from 'penpal';
 import { onWindowLoad, validateSecureOrigin } from '../utils';
 import { styles } from './styles';
 // Create a .env file to override the default WIDGET_URL when running locally
-var EMIT_WIDGET_URL = process.env.EMIT_WIDGET_URL || 'https://account.emit.technology/#/widget';
+var EMIT_WIDGET_URL = process.env.EMIT_WIDGET_URL || 'https://accounts.emit.technology/#/widget';
 var EMIT_CONTAINER_CLASS = 'emit-widget-container';
 var EMIT_IFRAME_CLASS = 'emit-widget-frame';
 export function windowLoadHandler() {

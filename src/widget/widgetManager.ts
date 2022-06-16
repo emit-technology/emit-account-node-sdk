@@ -7,7 +7,7 @@ import {styles} from './styles';
 import {ChainType} from "@emit-technology/emit-lib";
 
 // Create a .env file to override the default WIDGET_URL when running locally
-const EMIT_WIDGET_URL = process.env.EMIT_WIDGET_URL || 'https://account.emit.technology/#/widget';
+const EMIT_WIDGET_URL = process.env.EMIT_WIDGET_URL || 'https://accounts.emit.technology/#/widget';
 const EMIT_CONTAINER_CLASS = 'emit-widget-container';
 const EMIT_IFRAME_CLASS = 'emit-widget-frame';
 
