@@ -129,6 +129,7 @@ export interface IMethods {
 	}>;
 }
 export interface SignWrapped {
+	address: string;
 	chain: ChainType;
 	msg: any;
 	result?: any;
@@ -205,7 +206,6 @@ declare class Web3Manager {
 	setSelectedAddress(selectedAddress: string): void;
 	changeNetwork(network: string | INetwork): void;
 	private _initProvider;
-	private clearSubprovider;
 }
 declare class Rpc {
 	id: number;

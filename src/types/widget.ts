@@ -24,6 +24,7 @@ export interface IMethods {
 }
 
 export interface SignWrapped{
+    address: string
     chain: ChainType
     msg:any;
     result?:any;

@@ -1,3 +1,14 @@
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,26 +45,27 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { networkAdapter } from './network';
-import { onWindowLoad, validateSecureOrigin } from './utils';
-import { windowLoadHandler, WidgetManager } from './widget';
-import { Web3Manager } from './provider';
-import { DataNode } from "./rpc/dataNode";
-var VERSION = '1.1.4';
-onWindowLoad()
-    .then(windowLoadHandler)
+Object.defineProperty(exports, "__esModule", { value: true });
+var network_1 = require("./network");
+var utils_1 = require("./utils");
+var widget_1 = require("./widget");
+var provider_1 = require("./provider");
+var dataNode_1 = require("./rpc/dataNode");
+var VERSION = '$$EMIT_BOX_VERSION$$';
+utils_1.onWindowLoad()
+    .then(widget_1.windowLoadHandler)
     .catch(function () { }); // Prevents unhandledPromiseRejectionWarning, which happens when using React SSR;
 var EmitBox = /** @class */ (function () {
     function EmitBox(dapp, network) {
-        validateSecureOrigin();
+        utils_1.validateSecureOrigin();
         this._validateParams(network);
         this._config = {
-            network: networkAdapter(network),
+            network: network_1.networkAdapter(network),
             version: VERSION,
             dapp: dapp
         };
         this._getWidgetCommunication = this._getWidgetCommunication.bind(this);
-        this._widgetManagerInstance = new WidgetManager(this.config);
+        this._widgetManagerInstance = new widget_1.WidgetManager(this.config);
         this.changeNetwork = this.changeNetwork.bind(this);
         this.getWidget = this.getWidget.bind(this);
         this.onActiveWalletChanged = this.onActiveWalletChanged.bind(this);
@@ -61,7 +73,7 @@ var EmitBox = /** @class */ (function () {
         this.showWidget = this.showWidget.bind(this);
         this.setSelectedAddress = this.setSelectedAddress.bind(this);
         this.newProvider = this.newProvider.bind(this);
-        this.emitDataNode = new DataNode(this.config.network.nodeUrl, this._getWidgetCommunication, this._config);
+        this.emitDataNode = new dataNode_1.DataNode(this.config.network.nodeUrl, this._getWidgetCommunication, this._config);
     }
     Object.defineProperty(EmitBox.prototype, "_widgetManager", {
         get: function () {
@@ -73,7 +85,7 @@ var EmitBox = /** @class */ (function () {
     Object.defineProperty(EmitBox.prototype, "_web3Manager", {
         get: function () {
             if (!this._web3ManagerInstance) {
-                this._web3ManagerInstance = new Web3Manager(this.config, this._getWidgetCommunication);
+                this._web3ManagerInstance = new provider_1.Web3Manager(this.config, this._getWidgetCommunication);
             }
             return this._web3ManagerInstance;
         },
@@ -113,7 +125,7 @@ var EmitBox = /** @class */ (function () {
         configurable: true
     });
     EmitBox.prototype.newProvider = function (config) {
-        return new Web3Manager(config, this._getWidgetCommunication).provider;
+        return new provider_1.Web3Manager(config, this._getWidgetCommunication).provider;
     };
     EmitBox.prototype.changeNetwork = function (network) {
         this._web3Manager.changeNetwork(network);
@@ -176,6 +188,5 @@ var EmitBox = /** @class */ (function () {
     };
     return EmitBox;
 }());
-export * from './types';
-export default EmitBox;
-//# sourceMappingURL=index.js.map
+__exportStar(require("./types"), exports);
+exports.default = EmitBox;

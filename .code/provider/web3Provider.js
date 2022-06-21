@@ -51,12 +51,10 @@ exports.Web3Manager = void 0;
 var network_1 = require("../network");
 var utils_1 = require("../utils");
 var ProviderEngine = require('web3-provider-engine');
-var CacheSubprovider = require('web3-provider-engine/dist/es5/subproviders/cache.js');
+// const CacheSubprovider = require('web3-provider-engine/dist/es5/subproviders/cache.js');
 var FixtureSubprovider = require('web3-provider-engine/dist/es5/subproviders/fixture.js');
-var FilterSubprovider = require('web3-provider-engine/dist/es5/subproviders/filters.js');
+// const FilterSubprovider = require('web3-provider-engine/dist/es5/subproviders/filters.js');
 var HookedWalletSubprovider = require('web3-provider-engine/dist/es5/subproviders/hooked-wallet.js');
-var NonceSubprovider = require('web3-provider-engine/dist/es5/subproviders/nonce-tracker.js');
-var SubscriptionsSubprovider = require('web3-provider-engine/dist/es5/subproviders/subscriptions.js');
 var Web3Manager = /** @class */ (function () {
     function Web3Manager(config, _getWidgetCommunication) {
         this.config = config;
@@ -68,8 +66,8 @@ var Web3Manager = /** @class */ (function () {
     };
     Web3Manager.prototype.changeNetwork = function (network) {
         var newNetwork = network_1.networkAdapter(network);
-        this.clearSubprovider(NonceSubprovider);
-        this.clearSubprovider(CacheSubprovider);
+        // this.clearSubprovider(NonceSubprovider);
+        // this.clearSubprovider(CacheSubprovider);
         this.config.network = newNetwork;
     };
     Web3Manager.prototype._initProvider = function () {
@@ -140,13 +138,13 @@ var Web3Manager = /** @class */ (function () {
             eth_syncing: false,
         }));
         // cache layer
-        this.engine.addProvider(new CacheSubprovider());
+        // this.engine.addProvider(new CacheSubprovider());
         // subscriptions manager
-        this.engine.addProvider(new SubscriptionsSubprovider());
+        // this.engine.addProvider(new SubscriptionsSubprovider());
         // filters
-        this.engine.addProvider(new FilterSubprovider());
+        // this.engine.addProvider(new FilterSubprovider());
         // pending nonce
-        this.engine.addProvider(new NonceSubprovider());
+        // this.engine.addProvider(new NonceSubprovider());
         //
         // // data source
         // this.engine.addProvider(new RpcSubprovider({
@@ -346,11 +344,6 @@ var Web3Manager = /** @class */ (function () {
         });
         this.engine.start();
         return this.engine;
-    };
-    Web3Manager.prototype.clearSubprovider = function (subproviderType) {
-        var subprovider = this.provider._providers.find(function (subprovider) { return subprovider instanceof subproviderType; });
-        this.provider.removeProvider(subprovider);
-        this.provider.addProvider(new subproviderType());
     };
     return Web3Manager;
 }());

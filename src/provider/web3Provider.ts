@@ -4,12 +4,12 @@ import { AsyncMethodReturns } from 'penpal';
 import {getTxGas,IQuery,EthQuery,SeroQuery} from "../utils";
 
 const ProviderEngine = require('web3-provider-engine');
-const CacheSubprovider = require('web3-provider-engine/dist/es5/subproviders/cache.js');
+// const CacheSubprovider = require('web3-provider-engine/dist/es5/subproviders/cache.js');
 const FixtureSubprovider = require('web3-provider-engine/dist/es5/subproviders/fixture.js');
-const FilterSubprovider = require('web3-provider-engine/dist/es5/subproviders/filters.js');
+// const FilterSubprovider = require('web3-provider-engine/dist/es5/subproviders/filters.js');
 const HookedWalletSubprovider = require('web3-provider-engine/dist/es5/subproviders/hooked-wallet.js');
-const NonceSubprovider = require('web3-provider-engine/dist/es5/subproviders/nonce-tracker.js');
-const SubscriptionsSubprovider = require('web3-provider-engine/dist/es5/subproviders/subscriptions.js');
+// const NonceSubprovider = require('web3-provider-engine/dist/es5/subproviders/nonce-tracker.js');
+// const SubscriptionsSubprovider = require('web3-provider-engine/dist/es5/subproviders/subscriptions.js');
 // const RpcSubprovider = require('web3-provider-engine/subproviders/rpc.js');
 
 type ProviderCallback = (error: string | null, result: any) => void;
@@ -34,8 +34,8 @@ export class Web3Manager {
 
     changeNetwork(network: string | INetwork) {
         const newNetwork = networkAdapter(network);
-        this.clearSubprovider(NonceSubprovider);
-        this.clearSubprovider(CacheSubprovider);
+        // this.clearSubprovider(NonceSubprovider);
+        // this.clearSubprovider(CacheSubprovider);
         this.config.network = newNetwork;
     }
 
@@ -123,16 +123,16 @@ export class Web3Manager {
         );
 
         // cache layer
-        this.engine.addProvider(new CacheSubprovider());
+        // this.engine.addProvider(new CacheSubprovider());
 
         // subscriptions manager
-        this.engine.addProvider(new SubscriptionsSubprovider());
+        // this.engine.addProvider(new SubscriptionsSubprovider());
 
         // filters
-        this.engine.addProvider(new FilterSubprovider());
+        // this.engine.addProvider(new FilterSubprovider());
 
         // pending nonce
-        this.engine.addProvider(new NonceSubprovider());
+        // this.engine.addProvider(new NonceSubprovider());
         //
         // // data source
         // this.engine.addProvider(new RpcSubprovider({
@@ -253,9 +253,9 @@ export class Web3Manager {
         return this.engine;
     }
 
-    private clearSubprovider(subproviderType: any) {
-        const subprovider = this.provider._providers.find((subprovider: any) => subprovider instanceof subproviderType);
-        this.provider.removeProvider(subprovider);
-        this.provider.addProvider(new subproviderType());
-    }
+    // private clearSubprovider(subproviderType: any) {
+    //     const subprovider = this.provider._providers.find((subprovider: any) => subprovider instanceof subproviderType);
+    //     this.provider.removeProvider(subprovider);
+    //     this.provider.addProvider(new subproviderType());
+    // }
 }

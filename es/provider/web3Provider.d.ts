@@ -12,6 +12,5 @@ export declare class Web3Manager {
     setSelectedAddress(selectedAddress: string): void;
     changeNetwork(network: string | INetwork): void;
     private _initProvider;
-    private clearSubprovider;
 }
 export {};
