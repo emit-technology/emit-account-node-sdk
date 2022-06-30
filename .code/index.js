@@ -166,10 +166,17 @@ var EmitBox = /** @class */ (function () {
             });
         });
     };
-    EmitBox.prototype.requestAccount = function () {
+    EmitBox.prototype.requestAccount = function (accountId) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2 /*return*/, this._widgetManager.requestAccount()];
+                return [2 /*return*/, this._widgetManager.requestAccount(accountId)];
+            });
+        });
+    };
+    EmitBox.prototype.setLanguage = function (code) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this._widgetManager.setLanguage(code)];
             });
         });
     };

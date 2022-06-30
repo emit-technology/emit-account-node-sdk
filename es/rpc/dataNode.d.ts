@@ -13,7 +13,7 @@ export declare class DataNode extends Rpc {
     getBlock: (address: string, num: any) => Promise<any>;
     toHex(str: string, len?: number): string;
     getLatestBlocks: (address: string, pageSize?: number) => Promise<Array<BlockWrapped>>;
-    getSettles: (address: string) => Promise<Array<SettleResp>>;
+    getUnSettles: (address: string) => Promise<Array<SettleResp>>;
     compareSettles: (a: SettleResp, b: SettleResp) => 1 | 0 | -1;
     getFactors: (address: string) => Promise<Array<Factor>>;
     checkAccount: (address: string) => Promise<any>;

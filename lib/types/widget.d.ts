@@ -24,7 +24,7 @@ export interface IMethods {
         error: string;
         result: Array<SignWrapped>;
     }>;
-    requestAccount: (config: IConfig) => Promise<{
+    requestAccount: (config: IConfig, accountId?: string) => Promise<{
         error: string;
         result: AccountModel;
     }>;
@@ -32,6 +32,7 @@ export interface IMethods {
         error: string;
         result: string;
     }>;
+    setLanguage: (lang: string) => Promise<void>;
 }
 export interface SignWrapped {
     address: string;

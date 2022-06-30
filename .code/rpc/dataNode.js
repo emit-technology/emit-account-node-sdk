@@ -107,11 +107,11 @@ var DataNode = /** @class */ (function (_super) {
                 });
             });
         };
-        _this.getSettles = function (address) { return __awaiter(_this, void 0, void 0, function () {
+        _this.getUnSettles = function (address) { return __awaiter(_this, void 0, void 0, function () {
             var rest;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.post(method_1.METHOD.getSettles, [
+                    case 0: return [4 /*yield*/, this.post(method_1.METHOD.getUnSettles, [
                             address,
                         ])];
                     case 1:
@@ -154,14 +154,18 @@ var DataNode = /** @class */ (function (_super) {
                     case 0:
                         convertSet = [];
                         data_sets.forEach(function (v) {
-                            convertSet.push({
+                            var dataSet = {
                                 name: _this.toHex(v.name, 32),
-                                data: _this.toHex(v.data),
-                            });
+                                data: _this.toHex(v.data)
+                            };
+                            if (v.old) {
+                                dataSet.old = _this.toHex(v.old);
+                            }
+                            convertSet.push(dataSet);
                         });
                         blk = {
                             num: 0,
-                            timestamp: Math.ceil(Date.now() / 1000),
+                            timestamp: Math.ceil(Date.now()),
                             parent_hash: emit_lib_1.getDefaultHash(),
                             data_sets: convertSet,
                             data: "",

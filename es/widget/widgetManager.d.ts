@@ -16,10 +16,11 @@ export declare class WidgetManager {
     setOnActiveAccountChangedCallback(callback: (account: AccountModel) => void): void;
     setOnErrorCallback(callback: (error: Error) => void): void;
     showWidget(): Promise<void>;
-    requestAccount(): Promise<{
+    requestAccount(accountId?: string): Promise<{
         error: string;
         result: AccountModel;
     }>;
+    setLanguage(code: string): Promise<void>;
     calcGasPrice(gasLimitHex: string, chain: ChainType): Promise<{
         error: string;
         result: string;

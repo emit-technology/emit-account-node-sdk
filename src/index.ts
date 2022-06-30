@@ -109,8 +109,12 @@ class EmitBox {
         return this._widgetManager.batchSignMsg(signArr);
     }
 
-    async requestAccount(){
-        return this._widgetManager.requestAccount();
+    async requestAccount(accountId?:string){
+        return this._widgetManager.requestAccount(accountId);
+    }
+
+    async setLanguage(code:string){
+        return this._widgetManager.setLanguage(code);
     }
 
     async calcGasPrice(gasLimitHex:string,chain:ChainType){

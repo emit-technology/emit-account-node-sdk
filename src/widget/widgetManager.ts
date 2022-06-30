@@ -65,9 +65,14 @@ export class WidgetManager {
         return widgetCommunication.showWidget(this._widgetConfig);
     }
 
-    async requestAccount() {
+    async requestAccount(accountId?:string) {
         const widgetCommunication = (await this.getWidget()).communication;
-        return widgetCommunication.requestAccount(this._widgetConfig);
+        return widgetCommunication.requestAccount(this._widgetConfig,accountId);
+    }
+
+    async setLanguage(code:string) {
+        const widgetCommunication = (await this.getWidget()).communication;
+        return widgetCommunication.setLanguage(code);
     }
 
     async calcGasPrice(gasLimitHex:string,chain:ChainType) {

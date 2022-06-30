@@ -5,6 +5,7 @@ export var METHOD = {
     prepareBlock: "prepareBlock",
     getLatestBlocks: "getLatestBlocks",
     getSettles: "getSettles",
+    getUnSettles: "getUnsettles",
     getFactors: "getFactors",
     getBlock: "getBlock",
     checkAccount: "checkAccount",

@@ -18,9 +18,11 @@ export interface IMethods {
 
     batchSignMessage: (config: IConfig,signArr:Array<SignWrapped>)  => Promise<{error:string;result:Array<SignWrapped>}>;
 
-    requestAccount: (config: IConfig) => Promise<{error: string, result: AccountModel}>;
+    requestAccount: (config: IConfig,accountId?:string) => Promise<{error: string, result: AccountModel}>;
 
     calcGasPrice: (gasLimitHex:string,chain:ChainType,config: IConfig) => Promise<{error: string, result: string}>; //return gas price hex
+
+    setLanguage: (lang:string) => Promise<void>;
 }
 
 export interface SignWrapped{

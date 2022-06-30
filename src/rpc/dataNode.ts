@@ -59,8 +59,8 @@ export class DataNode extends Rpc {
         return await this.post(METHOD.getLatestBlocks, [address, pageSize]);
     };
 
-    getSettles = async (address: string): Promise<Array<SettleResp>> => {
-        const rest: Array<SettleResp> = await this.post(METHOD.getSettles, [
+    getUnSettles = async (address: string): Promise<Array<SettleResp>> => {
+        const rest: Array<SettleResp> = await this.post(METHOD.getUnSettles, [
             address,
         ]);
         rest.sort(this.compareSettles);
@@ -92,15 +92,19 @@ export class DataNode extends Rpc {
     ): Promise<PrepareBlock> => {
         const convertSet: Array<DataSet> = [];
         data_sets.forEach((v: DataSet) => {
-            convertSet.push({
+            const dataSet:DataSet = {
                 name: this.toHex(v.name, 32),
-                data: this.toHex(v.data),
-            });
+                data: this.toHex(v.data)
+            }
+            if(v.old){
+                dataSet.old = this.toHex(v.old)
+            }
+            convertSet.push(dataSet);
         });
 
         const blk: Block = {
             num: 0,
-            timestamp: Math.ceil(Date.now() / 1000),
+            timestamp: Math.ceil(Date.now()),
             parent_hash: getDefaultHash(),
             data_sets: convertSet,
             data: "",

@@ -42,10 +42,12 @@ export interface Category {
 export interface Out {
 	target: string;
 	factor: Factor;
+	data: string;
 }
 export interface DataSet {
 	name: string;
 	data: string;
+	old?: string;
 }
 export interface PrepareBlock {
 	address: string;
@@ -119,7 +121,7 @@ export interface IMethods {
 		error: string;
 		result: Array<SignWrapped>;
 	}>;
-	requestAccount: (config: IConfig) => Promise<{
+	requestAccount: (config: IConfig, accountId?: string) => Promise<{
 		error: string;
 		result: AccountModel;
 	}>;
@@ -127,6 +129,7 @@ export interface IMethods {
 		error: string;
 		result: string;
 	}>;
+	setLanguage: (lang: string) => Promise<void>;
 }
 export interface SignWrapped {
 	address: string;
@@ -176,10 +179,11 @@ declare class WidgetManager {
 	setOnActiveAccountChangedCallback(callback: (account: AccountModel) => void): void;
 	setOnErrorCallback(callback: (error: Error) => void): void;
 	showWidget(): Promise<void>;
-	requestAccount(): Promise<{
+	requestAccount(accountId?: string): Promise<{
 		error: string;
 		result: AccountModel;
 	}>;
+	setLanguage(code: string): Promise<void>;
 	calcGasPrice(gasLimitHex: string, chain: ChainType): Promise<{
 		error: string;
 		result: string;
@@ -223,7 +227,7 @@ declare class DataNode extends Rpc {
 	getBlock: (address: string, num: any) => Promise<any>;
 	toHex(str: string, len?: number): string;
 	getLatestBlocks: (address: string, pageSize?: number) => Promise<Array<BlockWrapped>>;
-	getSettles: (address: string) => Promise<Array<SettleResp>>;
+	getUnSettles: (address: string) => Promise<Array<SettleResp>>;
 	compareSettles: (a: SettleResp, b: SettleResp) => 1 | 0 | -1;
 	getFactors: (address: string) => Promise<Array<Factor>>;
 	checkAccount: (address: string) => Promise<any>;
@@ -251,10 +255,11 @@ declare class EmitBox {
 	onError(callback: (error: Error) => void): void;
 	showWidget(): Promise<void>;
 	batchSignMsg(signArr: Array<SignWrapped>): Promise<SignWrapped[]>;
-	requestAccount(): Promise<{
+	requestAccount(accountId?: string): Promise<{
 		error: string;
 		result: AccountModel;
 	}>;
+	setLanguage(code: string): Promise<void>;
 	calcGasPrice(gasLimitHex: string, chain: ChainType): Promise<{
 		error: string;
 		result: string;

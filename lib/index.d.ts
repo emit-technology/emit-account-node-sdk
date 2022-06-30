@@ -25,10 +25,11 @@ declare class EmitBox {
     onError(callback: (error: Error) => void): void;
     showWidget(): Promise<void>;
     batchSignMsg(signArr: Array<SignWrapped>): Promise<SignWrapped[]>;
-    requestAccount(): Promise<{
+    requestAccount(accountId?: string): Promise<{
         error: string;
         result: AccountModel;
     }>;
+    setLanguage(code: string): Promise<void>;
     calcGasPrice(gasLimitHex: string, chain: ChainType): Promise<{
         error: string;
         result: string;
