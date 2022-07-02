@@ -41,11 +41,11 @@ var EmitUtils = /** @class */ (function () {
         };
         this.fromValue = function (v, decimal) {
             if (decimal === void 0) { decimal = 18; }
-            return new bignumber_js_1.default(new BN(v, "hex", "le").toString()).dividedBy(Math.pow(10, decimal));
+            return new bignumber_js_1.default(new BN(v, "hex", "be").toString()).dividedBy(Math.pow(10, decimal));
         };
         this.formatValue = function (v, decimal) {
             if (decimal === void 0) { decimal = 18; }
-            return _this.nFormatter(new bignumber_js_1.default(new BN(v, "hex", "le").toString()).dividedBy(Math.pow(10, decimal)), 5);
+            return _this.nFormatter(new bignumber_js_1.default(new BN(v, "hex", "be").toString()).dividedBy(Math.pow(10, decimal)), 5);
         };
         this.formatDate = function (seconds) {
             return new Date(seconds * 1000).toLocaleTimeString() + " " + new Date(seconds * 1000).toLocaleDateString();
@@ -62,14 +62,14 @@ var EmitUtils = /** @class */ (function () {
     //     return "";
     //   }
     //   if (len) {
-    //     return new BN(v).toArrayLike(Buffer, "le", len).toString("hex");
+    //     return new BN(v).toArrayLike(Buffer, "be", len).toString("hex");
     //   }
     //   return Buffer.from(v).toString("hex");
     // }
     EmitUtils.prototype.toValueHex = function (v, decimal) {
         if (decimal === void 0) { decimal = 18; }
         var cv = new bignumber_js_1.default(v).multipliedBy(Math.pow(10, decimal)).toString(16);
-        return new BN(cv, "hex").toArrayLike(Buffer, "le", 32).toString("hex");
+        return new BN(cv, "hex").toArrayLike(Buffer, "be", 32).toString("hex");
     };
     EmitUtils.prototype.toHash = function (v) {
         return Buffer.alloc(32, 0)

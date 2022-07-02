@@ -30,14 +30,14 @@ class EmitUtils {
   //     return "";
   //   }
   //   if (len) {
-  //     return new BN(v).toArrayLike(Buffer, "le", len).toString("hex");
+  //     return new BN(v).toArrayLike(Buffer, "be", len).toString("hex");
   //   }
   //   return Buffer.from(v).toString("hex");
   // }
 
   toValueHex(v: any, decimal: number = 18) {
     const cv = new BigNumber(v).multipliedBy(10 ** decimal).toString(16);
-    return new BN(cv, "hex").toArrayLike(Buffer, "le", 32).toString("hex");
+    return new BN(cv, "hex").toArrayLike(Buffer, "be", 32).toString("hex");
   }
 
   toHash(v: string): string {
@@ -70,14 +70,14 @@ class EmitUtils {
   };
 
   fromValue = (v: string, decimal: number = 18): BigNumber => {
-    return new BigNumber(new BN(v, "hex", "le").toString()).dividedBy(
+    return new BigNumber(new BN(v, "hex", "be").toString()).dividedBy(
       10 ** decimal
     );
   };
 
   formatValue = (v: string, decimal: number = 18): string => {
     return this.nFormatter(
-      new BigNumber(new BN(v, "hex", "le").toString()).dividedBy(10 ** decimal),
+      new BigNumber(new BN(v, "hex", "be").toString()).dividedBy(10 ** decimal),
       5
     );
   };

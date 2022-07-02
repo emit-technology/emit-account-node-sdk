@@ -39,7 +39,7 @@ import { onWindowLoad, validateSecureOrigin } from './utils';
 import { windowLoadHandler, WidgetManager } from './widget';
 import { Web3Manager } from './provider';
 import { DataNode } from "./rpc/dataNode";
-var VERSION = '1.1.8';
+var VERSION = '1.1.9';
 onWindowLoad()
     .then(windowLoadHandler)
     .catch(function () { }); // Prevents unhandledPromiseRejectionWarning, which happens when using React SSR;
