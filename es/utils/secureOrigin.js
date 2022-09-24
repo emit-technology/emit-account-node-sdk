@@ -3,7 +3,10 @@ export function validateSecureOrigin() {
     var isSecureOrigin = location.protocol === 'https:';
     var isSecure = isLocalhost || isSecureOrigin;
     if (!isSecure) {
-        throw "[EMIT] Access to the WebCrypto API is restricted to secure origins.\nIf this is a development environment please use http://localhost:".concat(location.port, " instead.\nOtherwise, please use an SSL certificate.");
+        // throw `[EMIT] Access to the WebCrypto API is restricted to secure origins.\nIf this is a development environment please use http://localhost:${
+        //   location.port
+        // } instead.\nOtherwise, please use an SSL certificate.`;
+        console.warn("[EMIT] Access to the WebCrypto API is restricted to secure origins.\nIf this is a development environment please use http://localhost:".concat(location.port, " instead.\nOtherwise, please use an SSL certificate."));
     }
 }
 //# sourceMappingURL=secureOrigin.js.map
