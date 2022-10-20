@@ -39,7 +39,7 @@ import { onWindowLoad, validateSecureOrigin } from './utils';
 import { windowLoadHandler, WidgetManager } from './widget';
 import { Web3Manager } from './provider';
 import { DataNode } from "./rpc/dataNode";
-var VERSION = '1.2.0';
+var VERSION = '1.2.2';
 onWindowLoad()
     .then(windowLoadHandler)
     .catch(function () { }); // Prevents unhandledPromiseRejectionWarning, which happens when using React SSR;
@@ -165,6 +165,13 @@ var EmitBox = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, this._widgetManager.setLanguage(code)];
+            });
+        });
+    };
+    EmitBox.prototype.checkAccess = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this._widgetManager.checkAccess()];
             });
         });
     };

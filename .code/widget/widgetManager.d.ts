@@ -21,6 +21,7 @@ export declare class WidgetManager {
         result: AccountModel;
     }>;
     setLanguage(code: string): Promise<void>;
+    checkAccess(): Promise<boolean>;
     calcGasPrice(gasLimitHex: string, chain: ChainType): Promise<{
         error: string;
         result: string;

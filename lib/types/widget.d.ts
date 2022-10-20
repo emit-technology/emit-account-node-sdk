@@ -33,6 +33,7 @@ export interface IMethods {
         result: string;
     }>;
     setLanguage: (lang: string) => Promise<void>;
+    checkAccess: () => Promise<boolean>;
 }
 export interface SignWrapped {
     address: string;

@@ -23,6 +23,8 @@ export interface IMethods {
     calcGasPrice: (gasLimitHex:string,chain:ChainType,config: IConfig) => Promise<{error: string, result: string}>; //return gas price hex
 
     setLanguage: (lang:string) => Promise<void>;
+
+    checkAccess: () => Promise<boolean>;
 }
 
 export interface SignWrapped{

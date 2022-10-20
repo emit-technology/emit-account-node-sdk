@@ -1,6 +1,6 @@
 {
   "name": "@emit-technology/emit-account-node-sdk",
-  "version": "1.2.0",
+  "version": "1.2.2",
   "description": "EMIT Account SDK",
   "homepage": "https://emit.technology",
   "main": "lib/index.js",

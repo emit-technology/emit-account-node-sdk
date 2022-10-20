@@ -58,6 +58,9 @@ var WidgetManager = /** @class */ (function () {
         };
         utils_1.validateSecureOrigin();
         WidgetManager._checkIfWidgetAlreadyInitialized();
+        if (_widgetConfig.network.backupAccountUrl) {
+            this._widgetUrl = _widgetConfig.network.backupAccountUrl;
+        }
     }
     // async singleton
     WidgetManager.prototype.getWidget = function () {
@@ -126,6 +129,19 @@ var WidgetManager = /** @class */ (function () {
                     case 1:
                         widgetCommunication = (_a.sent()).communication;
                         return [2 /*return*/, widgetCommunication.setLanguage(code)];
+                }
+            });
+        });
+    };
+    WidgetManager.prototype.checkAccess = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var widgetCommunication;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.getWidget()];
+                    case 1:
+                        widgetCommunication = (_a.sent()).communication;
+                        return [2 /*return*/, widgetCommunication.checkAccess()];
                 }
             });
         });
@@ -224,8 +240,18 @@ var WidgetManager = /** @class */ (function () {
                         return [4 /*yield*/, connection.promise];
                     case 2:
                         communication = _a.sent();
+                        // const isAccess = await communication.checkAccess();
+                        // console.log("==== isAccess: ",isAccess, this._widgetConfig.network);
+                        // if(!isAccess &&  this._widgetConfig.network && this._widgetConfig.network.backupAccountUrl){
+                        //     iframe.src= this._widgetConfig.network.backupAccountUrl
+                        // }
                         return [4 /*yield*/, communication.setConfig(this._widgetConfig)];
                     case 3:
+                        // const isAccess = await communication.checkAccess();
+                        // console.log("==== isAccess: ",isAccess, this._widgetConfig.network);
+                        // if(!isAccess &&  this._widgetConfig.network && this._widgetConfig.network.backupAccountUrl){
+                        //     iframe.src= this._widgetConfig.network.backupAccountUrl
+                        // }
                         _a.sent();
                         return [2 /*return*/, { communication: communication, widgetFrame: widgetFrame }];
                 }

@@ -8,6 +8,7 @@ import {ChainType} from "@emit-technology/emit-lib";
 
 // Create a .env file to override the default WIDGET_URL when running locally
 const EMIT_WIDGET_URL = process.env.EMIT_WIDGET_URL || 'https://accounts.emit.technology/#/widget';
+
 const EMIT_CONTAINER_CLASS = 'emit-widget-container';
 const EMIT_IFRAME_CLASS = 'emit-widget-frame';
 
@@ -31,6 +32,10 @@ export class WidgetManager {
     constructor(private _widgetConfig: IConfig) {
         validateSecureOrigin();
         WidgetManager._checkIfWidgetAlreadyInitialized();
+        if(_widgetConfig.network.backupAccountUrl){
+            this._widgetUrl = _widgetConfig.network.backupAccountUrl
+        }
+
     }
 
     // async singleton
@@ -73,6 +78,11 @@ export class WidgetManager {
     async setLanguage(code:string) {
         const widgetCommunication = (await this.getWidget()).communication;
         return widgetCommunication.setLanguage(code);
+    }
+
+    async checkAccess() {
+        const widgetCommunication = (await this.getWidget()).communication;
+        return widgetCommunication.checkAccess();
     }
 
     async calcGasPrice(gasLimitHex:string,chain:ChainType) {
@@ -133,7 +143,6 @@ export class WidgetManager {
         iframe.style.height = '100%';
         iframe.style.width = '100%';
         iframe.style.border = '0 transparent';
-
         // This conditional is not Penpal-specific. It's merely
         // an example of how you can add an iframe to the document.
         if (
@@ -169,7 +178,16 @@ export class WidgetManager {
         });
 
         const communication = await connection.promise;
+
+        // const isAccess = await communication.checkAccess();
+        // console.log("==== isAccess: ",isAccess, this._widgetConfig.network);
+        // if(!isAccess &&  this._widgetConfig.network && this._widgetConfig.network.backupAccountUrl){
+        //     iframe.src= this._widgetConfig.network.backupAccountUrl
+        // }
+
         await communication.setConfig(this._widgetConfig);
+
+
 
         return {communication, widgetFrame};
     }

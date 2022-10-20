@@ -180,6 +180,13 @@ var EmitBox = /** @class */ (function () {
             });
         });
     };
+    EmitBox.prototype.checkAccess = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/, this._widgetManager.checkAccess()];
+            });
+        });
+    };
     EmitBox.prototype.calcGasPrice = function (gasLimitHex, chain) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {

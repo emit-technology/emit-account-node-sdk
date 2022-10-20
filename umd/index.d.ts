@@ -97,6 +97,7 @@ export interface INetwork {
 	nodeUrl: string;
 	chainId?: string;
 	chainType: ChainType;
+	backupAccountUrl?: string;
 }
 export interface IMethods {
 	getAccounts: (config: IConfig) => Promise<{
@@ -130,6 +131,7 @@ export interface IMethods {
 		result: string;
 	}>;
 	setLanguage: (lang: string) => Promise<void>;
+	checkAccess: () => Promise<boolean>;
 }
 export interface SignWrapped {
 	address: string;
@@ -184,6 +186,7 @@ declare class WidgetManager {
 		result: AccountModel;
 	}>;
 	setLanguage(code: string): Promise<void>;
+	checkAccess(): Promise<boolean>;
 	calcGasPrice(gasLimitHex: string, chain: ChainType): Promise<{
 		error: string;
 		result: string;
@@ -260,6 +263,7 @@ declare class EmitBox {
 		result: AccountModel;
 	}>;
 	setLanguage(code: string): Promise<void>;
+	checkAccess(): Promise<boolean>;
 	calcGasPrice(gasLimitHex: string, chain: ChainType): Promise<{
 		error: string;
 		result: string;

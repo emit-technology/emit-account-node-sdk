@@ -4,4 +4,5 @@ export interface INetwork {
     nodeUrl: string;
     chainId?: string;
     chainType:ChainType
+    backupAccountUrl?: string;
 }

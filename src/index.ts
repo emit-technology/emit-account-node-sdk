@@ -117,6 +117,10 @@ class EmitBox {
         return this._widgetManager.setLanguage(code);
     }
 
+    async checkAccess(){
+        return this._widgetManager.checkAccess();
+    }
+
     async calcGasPrice(gasLimitHex:string,chain:ChainType){
         return this._widgetManager.calcGasPrice(gasLimitHex,chain);
     }
